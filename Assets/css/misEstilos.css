@@ -1,0 +1,51 @@
+li{
+    width: 20%;
+    text-align: center;
+}
+ul{
+    width: 100%;
+}
+.cuerpo {
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    color: black;
+    letter-spacing: -1px;
+    padding: 10px 0;
+    background-color: white;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+.imgP{
+    width: 25%;
+    height: 25%;
+}
+.pie {
+    font-family: 'Lato', sans-serif;
+    text-transform: uppercase;
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: -1px;
+    padding: 10px 0;
+    background-color: black;
+}
+
+img.alineadoTextoImagen {
+    vertical-align: middle;
+}
+.container.centrar {
+    margin-top: 5%;
+    margin-bottom: 3.2%;
+    width: 90%;
+    max-width: 800px;
+    
+}
+.centrar {
+    width: 90%;
+    max-width: 800px;
+}

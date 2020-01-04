@@ -1,0 +1,71 @@
+ CONTROLADOR
+ public function listados_pdf()
+  {
+	require_once 'helpers/vendor/autoload.php';
+	ob_start();
+
+	$content = $this->modelo->listados_pdf($_GET['tipo']);
+    $html2pdf = new Spipu\Html2Pdf\Html2Pdf('P', 'A4', 'es');
+	$html2pdf->pdf->SetDisplayMode('fullpage');
+    $html2pdf->writeHTML($content);
+    $html2pdf->output('listado.pdf');
+  }
+  
+  MODELO
+  
+  public function listados_pdf($tipo) {
+    try {
+		if($tipo == "activos")
+		{
+			$sql = "SELECT * FROM usuarios WHERE activo = 1";
+		}
+		else
+		{
+			$sql = "SELECT * FROM usuarios WHERE activo = 0";
+		}
+		$query = $this->conexion->query($sql);
+		
+      //Supervisamos si la consulta se hizo correctamente
+      if (isset($query))
+      {
+        $listado = $query->fetchAll(PDO::FETCH_ASSOC);
+		$contenido = "";
+		if($tipo == "activos") :
+			$contenido .= '<h1>Listado de usuarios activos</h1><br>';
+		else :
+			$contenido .= '<h1>Listado de usuarios inactivos</h1><br>';
+		endif;
+		$contenido .= '<table cellspacing="1" border="1">';
+		$contenido .= '<tr>
+			<th>NIF</th>
+			<th>Nombre</th>
+			<th>Apellidos</th>
+			<th>Móvil</th>
+			<th>Usuario</th>
+			<th>Perfil</th>
+			<th>Dept.</th>
+			<th>Email</th>
+		</tr>';
+		foreach($listado as $u)
+		{
+			$contenido .= '<tr>
+			<td>'.$u["NIF"].'</td>
+			<td>'.$u["nombre"].'</td>
+			<td>'.$u["apellido1"].' '. $u["apellido2"].'</td>
+			<td>'. $u["movil"] . '</td>
+			<td>'.$u["user"].'</td>
+			<td>'.$u["perfil"].'</td>
+			<td>'.$u["departamento"].'</td>
+			<td>'.$u["email"].'</td>
+			</tr>';
+		}
+		$contenido .= '</table>';
+      }
+      else
+          $contenido = false;
+    } catch (PDOException $ex) {
+      $contenido = $ex->getMessage();
+    }
+
+    return $contenido;
+  }
