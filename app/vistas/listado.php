@@ -31,8 +31,10 @@
         <th>Departamento</th>
         <th>Aceptado</th>
         <th>Rol</th>
-        <!-- Añadimos una columna para las operaciones que podremos realizar con cada registro -->
+        <!-- Añadimos una columna para las operaciones que podremos realizar con cada registro (sólo para el administrador)-->
+        <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
         <th>Operaciones</th>
+        <?php endif; ?>
       </tr>
       <!--Los datos a listar están almacenados en $parametros["datos"], que lo recibimos del controlador-->
       <?php foreach ((array) $parametros["datos"] as $d) : ?>
@@ -50,8 +52,9 @@
           <td><?= $d["Aceptado"] ?></td>
           <td><?= $d["Rol"] ?></td>
 
-          <!-- Enviamos a actuser.php, mediante GET, el id del registro que deseamos editar o eliminar: -->
+          <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
           <td><a href="index.php?accion=editar&id=<?= $d['id'] ?>">Editar </a><a href="index.php?accion=borrarUsuario&id=<?= $d['id'] ?>">  Eliminar</a></td>
+          <?php endif; ?>
         </tr>
       <?php endforeach; ?>
     </table>

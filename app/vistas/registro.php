@@ -90,7 +90,7 @@
                 <div class="form-group">
                     <label for="departamento">Departamento*:</label>
                     <select name="departamento">
-                        <option value="0" selected>Infórmatica</option>
+                        <option value="0" selected>Informática</option>
                         <option value="1">Administración</option>
                         <option value="2">Comercio</option>
                     </select>

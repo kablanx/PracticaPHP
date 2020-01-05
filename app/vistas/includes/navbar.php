@@ -8,13 +8,13 @@
                     <a class="nav-link" href="index.php?accion=listado">Listado</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Incidencias</a>
+                    <a class="nav-link" href="index.php?accion=vistaIncidencias">Incidencias</a>
                 </li>
-                <!-- <?php if ($_SESSION["logueado"]->Rol == 0) : ?>
+                <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Logs</a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="#">Usuarios</a>
                     </li>
                 <?php endif; ?> -->
@@ -24,7 +24,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?accion=cerrarSesion">Cerrar Sesión</a>
                 </li>
-
             </ul>
 
         </nav>

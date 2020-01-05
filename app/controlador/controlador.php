@@ -31,7 +31,14 @@ class controlador
         include_once 'vistas/registro.php';
     }
 
-    public function vistaPDF(){
+    public function vistaIncidencias()
+    {
+        $parametros = ["tituloventana" => "Incidencias"];
+        $this->includes();
+        include_once 'vistas/vistaIncidencias.php';
+    }
+    public function vistaPDF()
+    {
         $parametros = ["tituloventana" => "Generar PDF"];
         $this->includes();
         include_once 'vistas/vistaPdf.php';
@@ -130,6 +137,19 @@ class controlador
         }
     }
 
+    public function enviarIncidencia()
+    {
+        $idProfesor = $_SESSION["logueado"]->id;
+        $mensaje = $_POST["mensaje"];
+        $idDepartamento = $_POST["departamento"];
+        $urgente = $_POST["estado"];
+
+        $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
+
+        if ($resultado){
+            echo "asd";
+        }
+    }
     public function enviarEditar()
     {
         $guardarUser = $this->validarEditar();

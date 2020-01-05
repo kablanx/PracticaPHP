@@ -150,6 +150,18 @@ class modelo
         return $resultado;
     }
 
+    public function enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $estado)
+    {
+        $sql = "INSERT INTO incidencias (`id`, `id_profesor`, `id_departamento`, `mensaje`, `estado`) VALUES (null,:idProfesor,:idDepartamento,:mensaje,:estado);";
+        $query = $this->conexion->prepare($sql);
+        $query->execute(['idProfesor' => $idProfesor, 'idDepartamento' => $idDepartamento, 'mensaje' => $mensaje, 'estado' => $estado]);
+        if ($query) {
+            $resultado = true;
+        } else {
+            $resultado = false;
+        }
+        return $resultado;
+    }
     public function listadoPdf($tipo)
     {
         try {

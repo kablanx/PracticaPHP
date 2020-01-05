@@ -22,9 +22,7 @@
         </div>
 
         <div class="container">
-
-
-
+            <!-- Para el recordar contraseña, falta crear la cookie -->
             <form action="index.php?accion=logueado" method="POST">
                 <label for="name">Usuario:
                     <input type="text" name="usuario" class="form-control" value="<?php if (isset($_COOKIE['usuario'])) {
