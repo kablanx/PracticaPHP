@@ -34,7 +34,7 @@
                                                                                             echo $_COOKIE['password'];
                                                                                         } ?>" />
                 </label><br />
-                <label><input type="checkbox" name="recuerdo">Recuérdame :) </label>
+                <label><input type="checkbox" name="recuerdo" value="on">Recuérdame :) </label>
                 <br />
                 <?php
                 if (isset($_SESSION['errores']["noaceptado"]) && !empty($_SESSION['errores']["noaceptado"])) {

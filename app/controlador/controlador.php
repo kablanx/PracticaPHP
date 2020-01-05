@@ -81,6 +81,13 @@ class controlador
         if ($usuarioValido == true) {
             $usuario = $_POST["usuario"];
             $password = sha1($_POST["password"]);
+
+            // Creamos la cookie si se ha marcado la casilla de recuérdame
+            if (isset($_POST["recuerdo"]) && $_POST["recuerdo"] == "on") {
+                setcookie("usuario", $_POST["usuario"], time() + (15 * 24 * 60 * 60));
+                setcookie("password", $_POST["password"], time() + (15 * 24 * 60 * 60));
+            }
+
             $resultado = $this->modelo->validarLogin($usuario, $password);
             if ($resultado->Rol === "0" || $resultado->Rol === "1") {
                 if ($resultado->Aceptado == "1") {
@@ -146,7 +153,7 @@ class controlador
 
         $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
 
-        if ($resultado){
+        if ($resultado) {
             echo "asd";
         }
     }
