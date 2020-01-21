@@ -122,15 +122,18 @@ class controlador
             $telefonoFijo = $_POST["telefonoFijo"];
 
             // Asignamos el valor del departamento
-            if ($_POST["departamento"] == 0) {
-                $departamento = "Informática";
+            /* if ($_POST["departamento"] == 0) {
+                $departamento = "1";
             } else {
                 if ($_POST["departamento"] == 1) {
-                    $departamento = "Administración";
+                    $departamento = "2";
                 } else {
-                    $departamento = "Comercio";
+                    $departamento = "3";
                 }
-            }
+            } */
+
+            // Probando otra forma
+            $departamento=$_POST["departamento"];
             $resultado = $this->modelo->registro($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $password, $telefonoMovil, $telefonoFijo, $departamento);
 
             if ($resultado == true) {

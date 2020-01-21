@@ -28,7 +28,7 @@
         <th>Nombre de usuario</th>
         <th>Telefono Movil</th>
         <th>Telefono Fijo</th>
-        <th>Departamento</th>
+        <th>Id Departamento</th>
         <th>Aceptado</th>
         <th>Rol</th>
         <!-- Añadimos una columna para las operaciones que podremos realizar con cada registro (sólo para el administrador)-->

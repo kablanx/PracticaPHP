@@ -62,7 +62,7 @@ class modelo
             "error" => NULL
         ];
         try {
-            $sql = "INSERT INTO usuarios (`id`, `Nif`, `Nombre`, `Apellido1`, `Apellido2`, `Email`, `NombreUsuario`, `PasswordSegura`, `TelefonoMovil`, `TelefonoFijo`, `Foto`, `Departamento`, `Aceptado`, `Rol`) VALUES (null,:nif,:nombre,:apellido1,:apellido2,:email,:nombreUsuario,:passwordSegura,:telefonoMovil,:telefonoFijo,'No hay foto todavia',:departamento, 0, 0);";
+            $sql = "INSERT INTO usuarios (`id`, `Nif`, `Nombre`, `Apellido1`, `Apellido2`, `Email`, `NombreUsuario`, `PasswordSegura`, `TelefonoMovil`, `TelefonoFijo`, `Departamento`, `Aceptado`, `Rol`) VALUES (null,:nif,:nombre,:apellido1,:apellido2,:email,:nombreUsuario,:passwordSegura,:telefonoMovil,:telefonoFijo,:departamento, 0, 0);";
             $query = $this->conexion->prepare($sql);
             $query->execute(['nif' => $nif, 'nombre' => $nombre, 'apellido1' => $apellido1, 'apellido2' => $apellido2, 'email' => $email, 'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura, 'telefonoMovil' => $telefonoMovil, 'telefonoFijo' => $telefonoFijo, 'departamento' => $departamento]);
 
