@@ -83,7 +83,7 @@
         <?php if($pagina==$numeroPaginas): ?>
           <li class="disabled">&raquo;</li>
         <?php else: ?>
-          <li><a href="index.php?accion=listado&pagina=<?php echo $pagina -1 ?>">&raquo;</a></li>
+          <li><a href="index.php?accion=listado&pagina=<?php echo $pagina +1 ?>">&raquo;</a></li>
         <?php endif; ?>
         <!-- <li><a href="#">&laquo;</a></li>
         <li><a href="#">1</a></li>
