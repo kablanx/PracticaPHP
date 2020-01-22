@@ -133,7 +133,7 @@ class controlador
             } */
 
             // Probando otra forma
-            $departamento=$_POST["departamento"];
+            $departamento = $_POST["departamento"];
             $resultado = $this->modelo->registro($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $password, $telefonoMovil, $telefonoFijo, $departamento);
 
             if ($resultado == true) {
@@ -236,15 +236,28 @@ class controlador
         $parametros = [
             "tituloventana" => "Listado de usuarios",
             "datos" => NULL,
+            "datosPaginacion"=>Null,
             "mensajes" => []
         ];
+
+        //Establecemos el número de registroa a mostrar por página,por defecto 2
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 2;
+        //Establecemos el la página que vamos a mostrar, por página,por defecto la 1
+        $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
+
+        //Definimos la variable $inicio que indique la posición del registro desde el que se
+        // mostrarán los registros de una página dentro de la paginación.
+        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+
         // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-        $resultModelo = $this->modelo->listado();
+        $resultModelo = $this->modelo->listado($inicio, $regsxpag);
         // Si la consulta se realizó correctamente transferimos los datos obtenidos
         // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
         // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
         if ($resultModelo["correcto"]) :
             $parametros["datos"] = $resultModelo["datos"];
+            $parametros["datosPaginacion"]=$resultModelo["datosPaginacion"];
             //Definimos el mensaje para el alert de la vista de que todo fue correctamente
             $this->mensajes[] = [
                 "tipo" => "success",
@@ -257,6 +270,8 @@ class controlador
                 "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$parametros["error"]})"
             ];
         endif;
+
+
         //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
         //'mensaje', que recoge cómo finalizó la operación:
         $parametros["mensajes"] = $this->mensajes;

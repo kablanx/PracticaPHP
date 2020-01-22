@@ -31,22 +31,31 @@ class modelo
         return $return;
     }
 
-    public function listado()
+    public function listado($inicio, $regsxpag)
     {
         $return = [
             "correcto" => FALSE,
             "datos" => NULL,
+            "datosPaginacion"=>Null,
             "error" => NULL
         ];
         //Realizamos la consulta...
         try {  //Definimos la instrucción SQL  
-            $sql = "SELECT * FROM usuarios";
+            $sql="SELECT SQL_CALC_FOUND_ROWS * FROM usuarios LIMIT $inicio, $regsxpag";
             // Hacemos directamente la consulta al no tener parámetros
             $resultsquery = $this->conexion->query($sql);
+
+            // Para saber el número de páginas que hay
+            $totalRegistros=$this->conexion->query("SELECT FOUND_ROWS() as total");
+            $totalRegistros=$totalRegistros->fetch()["total"];
+            $numeroPaginas=ceil($totalRegistros/$regsxpag);
+            var_dump($numeroPaginas);
+
             //Supervisamos si la inserción se realizó correctamente... 
             if ($resultsquery) :
                 $return["correcto"] = TRUE;
                 $return["datos"] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+                $return["datosPaginacion"]= $numeroPaginas;
             endif; // o no :(
         } catch (PDOException $ex) {
             $return["error"] = $ex->getMessage();
