@@ -49,7 +49,6 @@ class modelo
             $totalRegistros=$this->conexion->query("SELECT FOUND_ROWS() as total");
             $totalRegistros=$totalRegistros->fetch()["total"];
             $numeroPaginas=ceil($totalRegistros/$regsxpag);
-            var_dump($numeroPaginas);
 
             //Supervisamos si la inserción se realizó correctamente... 
             if ($resultsquery) :

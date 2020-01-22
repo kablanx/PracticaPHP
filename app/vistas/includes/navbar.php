@@ -14,10 +14,8 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#">Logs</a>
                     </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="#">Usuarios</a>
-                    </li>
-                <?php endif; ?> -->
+                    
+                <?php endif; ?>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Mensajes</a>
                 </li>

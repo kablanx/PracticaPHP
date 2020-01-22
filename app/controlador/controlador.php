@@ -149,16 +149,26 @@ class controlador
 
     public function enviarIncidencia()
     {
+       
         $idProfesor = $_SESSION["logueado"]->id;
         $mensaje = $_POST["mensaje"];
         $idDepartamento = $_POST["departamento"];
         $urgente = $_POST["estado"];
-
-        $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
-
-        if ($resultado) {
-            echo "asd";
+        $mensaje=trim($mensaje);
+        if(isset($mensaje) && !empty($mensaje)){
+           
+            $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
+            if ($resultado) {
+                echo "<div class='alert alert-success'>Se ha enviado correctamente.</div>";
+            $this->vistaIncidencias();
+            }
+        }else{
+            echo "<div class='alert alert-danger'>Ha ocurrido un error.</div>";
+            $this->vistaIncidencias();
         }
+        
+
+        
     }
     public function enviarEditar()
     {
@@ -240,8 +250,8 @@ class controlador
             "mensajes" => []
         ];
 
-        //Establecemos el número de registroa a mostrar por página,por defecto 2
-        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 2;
+        //Establecemos el número de registros a mostrar por página,por defecto 2
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 5;
         //Establecemos el la página que vamos a mostrar, por página,por defecto la 1
         $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
 
