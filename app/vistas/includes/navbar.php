@@ -20,6 +20,9 @@
                     <a class="nav-link" href="#">Mensajes</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="#">Convertir a PDF</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="index.php?accion=cerrarSesion">Cerrar Sesión</a>
                 </li>
             </ul>

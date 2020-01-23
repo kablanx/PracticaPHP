@@ -17,11 +17,21 @@ textarea#mensaje {
     padding: 10px 0;
     background-color: white;
 }
-
+.encabezado{
+    background-color: #343a40!important;
+    color:white;
+}
 .text-right {
     text-align: right;
 }
-
+.paginacion{
+    border: 4px aliceblue solid;
+    background-color: grey;
+}
+label {
+    margin-top: -8px;
+    display: block;
+}
 .text-center {
     text-align: center;
 }
@@ -52,4 +62,14 @@ img.alineadoTextoImagen {
 .centrar {
     width: 90%;
     max-width: 800px;
+}
+
+/* Para que el captcha esté centrado. */
+.form-group.g-recaptcha {
+    text-align: -webkit-center;
+}
+
+/* Para que tenga el mismo color de fondo que la barra de navegación. */
+.page-item.active .page-link {
+    background-color: #343a40!important;
 }

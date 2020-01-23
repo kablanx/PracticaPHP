@@ -63,34 +63,31 @@
       </table>
     </div>
     <div>
-      <ul>
-        <?php if ($pagina==1): ?>
-          <li class="disabled">&laquo;</li>
-        <?php else: ?>
-          <li><a href="index.php?accion=listado&pagina=<?php echo $pagina -1 ?>">&laquo;</a></li>
+
+      <ul class="pagination">
+        <?php if ($pagina == 1) : ?>
+          <li class="page-item disabled paginacion"><a class="page-link">&laquo;</a></li>
+        <?php else : ?>
+          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listado&pagina=<?php echo $pagina - 1 ?>">&laquo;</a></li>
         <?php endif; ?>
 
-        <?php 
-        $numeroPaginas=$parametros["datosPaginacion"];
-        for($i=1;$i<=$numeroPaginas;$i++){
-          if($pagina==$i){
-            echo "<li class='active'><a href='index.php?accion=listado&pagina=$i'>$i</a></li>";
-          }else{
-            echo "<li><a href='index.php?accion=listado&pagina=$i'>$i</a></li>";
+        <?php
+        $numeroPaginas = $parametros["datosPaginacion"];
+        for ($i = 1; $i <= $numeroPaginas; $i++) {
+          if ($pagina == $i) {
+            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listado&pagina=$i'>$i</a></li>";
+          } else {
+            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listado&pagina=$i'>$i</a></li>";
           }
         }
         ?>
-        <?php if($pagina==$numeroPaginas): ?>
-          <li class="disabled">&raquo;</li>
-        <?php else: ?>
-          <li><a href="index.php?accion=listado&pagina=<?php echo $pagina +1 ?>">&raquo;</a></li>
+
+        <?php if ($pagina == $numeroPaginas) : ?>
+          <li class="page-item disabled paginacion"><a class="page-link">&raquo;</a></li>
+        <?php else : ?>
+          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listado&pagina=<?php echo $pagina + 1 ?>">&raquo;</a></li>
         <?php endif; ?>
-        <!-- <li><a href="#">&laquo;</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">&raquo;</a></li> -->
+
       </ul>
     </div>
   </div>

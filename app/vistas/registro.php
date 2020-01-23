@@ -6,25 +6,24 @@
     <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
-<body class="container">
+<body class="text-center">
     <!-- Encabezado -->
-    <div class="encabezado text-center">
+    <div class="encabezado">
         <h1>DAWES-Práctica</h1>
-        <h6 class="text-right">SPR♥</h6>
     </div>
 
     <!-- PREGUNTAR
     Sobre el atributo max-width del container. Para saber si es responsive o puedo asignarle algún valor
 -->
-    <div class="centrar ">
+    <div>
         <a href="index.php?accion=index">Inicio</a>
-        <div class="container text-center">
+        <div>
             
                 <h2><img class="alineadoTextoImagen" src="../Assets/img/user.png" width="50px" /> Registro:</h2>
             
         </div>
         <div>
-            <form id="form-login" action="index.php?accion=enviarRegistro" method="post" enctype="multipart/form-data">
+            <form id="form-login" class="form" action="index.php?accion=enviarRegistro" method="post" enctype="multipart/form-data">
                 <!-- NIF -->
                 <div class="form-group">
                     <label for="nif">NIF*:</label>
@@ -50,12 +49,6 @@
                     <span><?php echo isset($_SESSION["errores"]) ? mostrarError($_SESSION["errores"], "apellido1") : "" ?></span>
                 </div>
 
-                <!-- Imagen -->
-                <div class="form-group">
-                    <!-- <input type="hidden" /> -->
-                    <input type="file" name="imagen" />
-                    
-                </div>
                 <!-- Email -->
                 <div class="form-group">
                     <label for="email">Email*:</label>
@@ -71,7 +64,7 @@
                 <!-- Password -->
                 <div class="form-group">
                     <label for="password">Contraseña*:</label>
-                    <input name="password" type="text" id="password" class="password" placeholder="Password" autofocus="" required /></p>
+                    <input name="password" type="password" id="password" class="password" placeholder="Password" autofocus="" required /></p>
                     <span><?php echo isset($_SESSION["errores"]) ? mostrarError($_SESSION["errores"], "password") : "" ?></span>
                 </div>
                 <!-- Teléfono móvil -->
@@ -96,7 +89,7 @@
                     </select>
                 </div>
                 <!-- Captcha -->
-                <div class="g-recaptcha" data-sitekey="6LfhQMkUAAAAAEe6IEqXzE3B4KiCQxoIONSAqBwl"></div>
+                <div class="form-group g-recaptcha" data-sitekey="6LfhQMkUAAAAAEe6IEqXzE3B4KiCQxoIONSAqBwl"></div>
                 <span ><?php  echo isset($_SESSION['errores']) ? mostrarError($_SESSION['errores'], 'captcha'):"" ?></span>
                 <div>
                     <input name="submit" type="submit" id="boton" value="Registrar" class="boton" />
