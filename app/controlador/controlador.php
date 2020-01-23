@@ -49,19 +49,29 @@ class controlador
         $this->includes();
         include_once 'vistas/inicio.php';
     }
+    public function controlUsuarios(){
+        $parametros=["tituloventana" =>"Control de usuarios"];
+        $this->includes();
+        include_once "vistas/vistaInicioUsuarios.php";
+    }
     public function includes()
     {
         include_once 'vistas/includes/head.php';
         require_once 'vistas/includes/helpers.php';
     }
-    public function editar()
+    public function editarUsuario()
     {
         $parametros = ["tituloventana" => "Editar"];
         $this->includes();
         // Guardamos el id que queremos editar para poder usarlo más adelante.
         $_SESSION["idEditar"] = $_GET["id"];
 
-        include_once 'vistas/editar.php';
+        include_once 'vistas/editarUsuario.php';
+    }
+    public function agregarUsuario(){
+        $parametros=["tituloventana"=>"Agregar usuario"];
+        $this->includes();
+        include_once "vistas/agregarUsuario.php";
     }
     public function cerrarSesion()
     {
@@ -106,6 +116,34 @@ class controlador
             $this->index();
         }
     }
+
+    public function enviarUsuario(){
+        $guardarUser=$this->validarAgregarUsuario();
+        if ($guardarUser["valido"] == true) {
+            $nif = $_POST["nif"];
+            $nombre = $_POST["nombre"];
+            $apellido1 = $_POST["apellido1"];
+            $apellido2 = $_POST["apellido2"];
+            $email = $_POST["email"];
+            $nombreUsuario = $_POST["nombreUsuario"];
+            $password = sha1($_POST["password"]);
+            $telefonoMovil = $_POST["telefonoMovil"];
+            $telefonoFijo = $_POST["telefonoFijo"];
+            $departamento = $_POST["departamento"];
+            $rol=$_POST["rol"];
+
+            $resultado = $this->modelo->agregarUsuario($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $password, $telefonoMovil, $telefonoFijo, $departamento, $rol);
+
+            if ($resultado == true) {
+                $_SESSION["errores"]["registrado"] = "<strong>Usuario añadido correctamente! :)</strong>";
+                $this->agregarUsuario();
+            } else {
+                $this->agregarUsuario();
+            } 
+        } else {
+            $this->agregarUsuario();
+        }
+    }
     public function enviarRegistro()
     {
 
@@ -121,16 +159,7 @@ class controlador
             $telefonoMovil = $_POST["telefonoMovil"];
             $telefonoFijo = $_POST["telefonoFijo"];
 
-            // Asignamos el valor del departamento
-            /* if ($_POST["departamento"] == 0) {
-                $departamento = "1";
-            } else {
-                if ($_POST["departamento"] == 1) {
-                    $departamento = "2";
-                } else {
-                    $departamento = "3";
-                }
-            } */
+            
 
             // Probando otra forma
             $departamento = $_POST["departamento"];
@@ -149,26 +178,23 @@ class controlador
 
     public function enviarIncidencia()
     {
-       
+
         $idProfesor = $_SESSION["logueado"]->id;
         $mensaje = $_POST["mensaje"];
         $idDepartamento = $_POST["departamento"];
         $urgente = $_POST["estado"];
-        $mensaje=trim($mensaje);
-        if(isset($mensaje) && !empty($mensaje)){
-           
+        $mensaje = trim($mensaje);
+        if (isset($mensaje) && !empty($mensaje)) {
+
             $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
             if ($resultado) {
                 echo "<div class='alert alert-success'>Se ha enviado correctamente.</div>";
-            $this->vistaIncidencias();
+                $this->vistaIncidencias();
             }
-        }else{
+        } else {
             echo "<div class='alert alert-danger'>Ha ocurrido un error.</div>";
             $this->vistaIncidencias();
         }
-        
-
-        
     }
     public function enviarEditar()
     {
@@ -213,13 +239,13 @@ class controlador
 
             if ($resultado == true) {
                 echo "Se lo traga ;)";
-                $this->listado();
+                $this->listadoUsuarios();
             } else {
                 echo "Ha ocurrido un error editar :(";
-                $this->listado();
+                $this->listadoUsuarios();
             }
         } else {
-            $this->listado();
+            $this->listadoUsuarios();
         }
     }
 
@@ -237,16 +263,13 @@ class controlador
         }
     }
 
-    public function editarUsuario()
-    {
-    }
-    public function listado()
+    public function listadoUsuarios()
     {
         // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
         $parametros = [
             "tituloventana" => "Listado de usuarios",
             "datos" => NULL,
-            "datosPaginacion"=>Null,
+            "datosPaginacion" => Null,
             "mensajes" => []
         ];
 
@@ -267,7 +290,7 @@ class controlador
         // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
         if ($resultModelo["correcto"]) :
             $parametros["datos"] = $resultModelo["datos"];
-            $parametros["datosPaginacion"]=$resultModelo["datosPaginacion"];
+            $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
             //Definimos el mensaje para el alert de la vista de que todo fue correctamente
             $this->mensajes[] = [
                 "tipo" => "success",
@@ -425,6 +448,103 @@ class controlador
                 $errores["captcha"] = "Error al comprobar el captcha";
             }
 
+            $guardarUser = array();
+            $guardarUser["valido"] = false;
+            if (count($errores) == 0) {
+                $guardarUser["valido"] = true;
+            } else {
+                $_SESSION["errores"] = $errores;
+            }
+        }
+        return $guardarUser;
+    }
+
+    public function validarAgregarUsuario(){
+        if (isset($_POST)) {
+
+            $errores = array();
+
+            $nif = !empty($_POST["nif"]) ? $_POST["nif"] : false;
+            $nombre = !empty($_POST["nombre"]) ? $_POST["nombre"] : false;
+            $apellido1 = !empty($_POST["apellido1"]) ? $_POST["apellido1"] : false;
+            $apellido2 = !empty($_POST["apellido2"]) ? $_POST["apellido2"] : false;
+            $email = !empty($_POST["email"]) ? $_POST["email"] : false;
+            $nombreUsuario = !empty($_POST["nombreUsuario"]) ? $_POST["nombreUsuario"] : false;
+            $password = !empty($_POST["password"]) ? $_POST["password"] : false;
+            $telefonoMovil = !empty($_POST["telefonoMovil"]) ? $_POST["telefonoMovil"] : false;
+            $telefonoFijo = !empty($_POST["telefonoFijo"]) ? $_POST["telefonoFijo"] : false;
+            $departamento = !empty($_POST["departamento"]) ? $_POST["departamento"] : false;
+
+
+            //validar nif
+
+            if (!empty($nif) &&  preg_match('/^[0-9]{8}[a-zA-Z]{1}$/', $nif)) {
+                $nifValido = true;
+            } else {
+                $nifValido = false;
+                $errores["nif"] = "El NIF introducido no es válido";
+            }
+
+            // Nombre
+            if (!empty($nombre) && !is_numeric($nombre) && !preg_match("/[0-9]/", $nombre)) {
+                $nombreValido = true;
+            } else {
+                $nombreValido = false;
+                $errores["nombre"] = "El nombre introducido no es válido.";
+            }
+            // Primer apellido 
+            if (!empty($apellido1) && !is_numeric($apellido1) && !preg_match("/[0-9]/", $apellido1)) {
+                $apellido1Valido = true;
+            } else {
+                $apellido1Valido = false;
+                $errores["apellido1"] = "El primer apellido introducido no es válido.";
+            }
+            // Segundo apellido
+            if (!empty($apellido2) && !is_numeric($apellido2) && !preg_match("/[0-9]/", $apellido2)) {
+                $apellido2Valido = true;
+            } else {
+                $apellido2Valido = false;
+                $errores["apellido2"] = "El segundo apellido introducido no es válido.";
+            }
+
+            // Email
+            if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+                $errores["email"] = "El email introducido no es válido";
+                $emailValido = true;
+            } else {
+                $emailValido = false;
+            }
+            // Nombre de usuario
+            if (!empty($nombreUsuario) && !is_numeric($nombreUsuario) && !preg_match("/[0-9]/", $nombreUsuario)) {
+                $nombreUsuarioValido = true;
+            } else {
+                $nombreUsuarioValido = false;
+                $errores["nombreUsuario"] = "El nombre de usuario introducido no es válido.";
+            }
+            // Password
+            if (!empty($password) && !strlen($password) < 8 && preg_match("/[a-zA-Z ]/", $password) && preg_match("/[0-9]/", $password) && preg_match("/[@#-_%&^+=!?.,<>]/", $password)) {
+                $passwordValido = true;
+            } else {
+                $passwordValido = false;
+                $errores["password"] = "La contraseña no es valida";
+            }
+            // Telefono móvil
+            if (!empty($telefonoMovil) && preg_match('/^[6-7][0-9]{8}$/', $telefonoMovil)) {
+                $telefonoMovilValido = true;
+            } else {
+                $telefonoMovilValido = false;
+                $errores["telefonoMovil"] = "El teléfono movil introducido no es válido";
+            }
+            // Telefojo fijo
+            if (!empty($telefonoFijo) && preg_match('/^[9][0-9]{8}$/', $telefonoFijo)) {
+                $telefonoFijoValido = true;
+            } else {
+                $telefonoFijoValido = false;
+                $errores["telefonoFijo"] = "El teléfono fijo introducido no es válido";
+            }
+
+            
             $guardarUser = array();
             $guardarUser["valido"] = false;
             if (count($errores) == 0) {

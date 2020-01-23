@@ -62,6 +62,32 @@ class modelo
         return $return;
     }
 
+    public function agregarUsuario($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $passwordSegura, $telefonoMovil, $telefonoFijo, $departamento, $rol){
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "error" => NULL
+        ];
+        try {
+            $sql = "INSERT INTO usuarios (`id`, `Nif`, `Nombre`, `Apellido1`, `Apellido2`, `Email`, `NombreUsuario`, `PasswordSegura`, `TelefonoMovil`, `TelefonoFijo`, `Departamento`, `Aceptado`, `Rol`) VALUES (null,:nif,:nombre,:apellido1,:apellido2,:email,:nombreUsuario,:passwordSegura,:telefonoMovil,:telefonoFijo,:departamento, 1, :rol);";
+            $query = $this->conexion->prepare($sql);
+            $query->execute(['nif' => $nif, 'nombre' => $nombre, 'apellido1' => $apellido1, 'apellido2' => $apellido2, 'email' => $email, 'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura, 'telefonoMovil' => $telefonoMovil, 'telefonoFijo' => $telefonoFijo, 'departamento' => $departamento, 'rol'=>$rol]);
+
+            if ($query) {
+                $resultado = true;
+            } else {
+                $resultado = false;
+            }
+        } catch (PDOException $ex) {
+
+            $resultado = $ex->getMessage();
+
+            //$return["error"] = $ex->getMessage();
+
+            //die();
+        }
+        return $resultado;
+    }
     public function registro($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $passwordSegura, $telefonoMovil, $telefonoFijo, $departamento)
     {
         $return = [

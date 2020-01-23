@@ -5,7 +5,7 @@
                     <a class="nav-link" href="index.php?accion=inicioLogueado">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?accion=listado">Listado</a>
+                    <a class="nav-link" href="index.php?accion=controlUsuarios">Usuarios</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="index.php?accion=vistaIncidencias">Incidencias</a>

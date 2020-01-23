@@ -17,7 +17,7 @@
       <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
     <?php endforeach; ?>
     <!--Creamos la tabla que utilizaremos para el listado:-->
-    <div>
+    <div class="tabla">
 
 
       <table class="table table-striped">
@@ -56,7 +56,7 @@
             <td><?= $d["Rol"] ?></td>
 
             <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
-              <td><a href="index.php?accion=editar&id=<?= $d['id'] ?>">Editar </a><a href="index.php?accion=borrarUsuario&id=<?= $d['id'] ?>"> Eliminar</a></td>
+              <td><a href="index.php?accion=editarUsuario&id=<?= $d['id'] ?>">Editar </a><a href="index.php?accion=borrarUsuario&id=<?= $d['id'] ?>"> Eliminar</a></td>
             <?php endif; ?>
           </tr>
         <?php endforeach; ?>
@@ -68,16 +68,16 @@
         <?php if ($pagina == 1) : ?>
           <li class="page-item disabled paginacion"><a class="page-link">&laquo;</a></li>
         <?php else : ?>
-          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listado&pagina=<?php echo $pagina - 1 ?>">&laquo;</a></li>
+          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoUsuarios&pagina=<?php echo $pagina - 1 ?>">&laquo;</a></li>
         <?php endif; ?>
 
         <?php
         $numeroPaginas = $parametros["datosPaginacion"];
         for ($i = 1; $i <= $numeroPaginas; $i++) {
           if ($pagina == $i) {
-            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listado&pagina=$i'>$i</a></li>";
+            echo "<li class='page-item paginacion'><a class='page-link' href='index.php?accion=listadoUsuarios&pagina=$i'>$i</a></li>";
           } else {
-            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listado&pagina=$i'>$i</a></li>";
+            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listadoUsuarios&pagina=$i'>$i</a></li>";
           }
         }
         ?>
@@ -85,7 +85,7 @@
         <?php if ($pagina == $numeroPaginas) : ?>
           <li class="page-item disabled paginacion"><a class="page-link">&raquo;</a></li>
         <?php else : ?>
-          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listado&pagina=<?php echo $pagina + 1 ?>">&raquo;</a></li>
+          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoUsuarios&pagina=<?php echo $pagina + 1 ?>">&raquo;</a></li>
         <?php endif; ?>
 
       </ul>

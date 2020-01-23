@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+<?php require_once 'includes/head.php'; ?>
 </head>
 
 <body>
@@ -73,9 +74,9 @@
                 <div class="form-group">
                     <label for="departamento">Departamento:</label>
                     <select name="departamento">
-                        <option value="0" selected>Infórmatica</option>
-                        <option value="1">Administración</option>
-                        <option value="2">Comercio</option>
+                        <option value="1" selected>Infórmatica</option>
+                        <option value="2">Administración</option>
+                        <option value="3">Comercio</option>
                     </select>
                 </div>
                 <!-- Aceptado -->

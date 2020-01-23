@@ -55,7 +55,8 @@
             </form>
 
         </div>
-        <div>
+        <br>
+        <div class="font-large">
             <a href="index.php?accion=registro">Crear una cuenta</a>
         </div>
     </div>
