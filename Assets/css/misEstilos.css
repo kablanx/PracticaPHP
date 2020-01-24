@@ -14,7 +14,9 @@ textarea#mensaje {
 .colorcito {
     background-color: blueviolet;
 }
-
+.pagination{
+    width: 95%;
+}
 .cuerpo {
     font-family: 'Lato', sans-serif;
     font-size: 16px;

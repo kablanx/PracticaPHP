@@ -31,11 +31,16 @@ class controlador
         include_once 'vistas/registro.php';
     }
 
-    public function vistaIncidencias()
+    public function vistaEnviarIncidencias()
     {
-        $parametros = ["tituloventana" => "Incidencias"];
+        $parametros = ["tituloventana" => "Enviar incidencias"];
         $this->includes();
         include_once 'vistas/vistaIncidencias.php';
+    }
+    public function vistaInicioIncidencias(){
+        $parametros = ["tituloventana" => "Enviar incidencias"];
+        $this->includes();
+        include_once 'vistas/vistaInicioIncidencias.php';
     }
     public function vistaPDF()
     {
@@ -189,11 +194,11 @@ class controlador
             $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
             if ($resultado) {
                 echo "<div class='alert alert-success'>Se ha enviado correctamente.</div>";
-                $this->vistaIncidencias();
+                $this->vistaEnviarIncidencias();
             }
         } else {
             echo "<div class='alert alert-danger'>Ha ocurrido un error.</div>";
-            $this->vistaIncidencias();
+            $this->vistaEnviarIncidencias();
         }
     }
     public function enviarEditar()
@@ -263,6 +268,38 @@ class controlador
         }
     }
 
+    public function listadoIncidencias(){
+        $parametros = [
+            "tituloventana" => "Listado de usuarios",
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "mensajes" => []
+        ];
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 5;
+        $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
+        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+        $resultModelo = $this->modelo->listadoIncidencias($inicio, $regsxpag);
+        
+        if ($resultModelo["correcto"]) :
+            $parametros["datos"] = $resultModelo["datos"];
+            $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
+            //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+            $this->mensajes[] = [
+                "tipo" => "success",
+                "mensaje" => "El listado se realizó correctamente"
+            ];
+        else :
+            //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+            $this->mensajes[] = [
+                "tipo" => "danger",
+                "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$parametros["error"]})"
+            ];
+        endif;
+        $parametros["mensajes"] = $this->mensajes;
+        // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
+        include_once 'vistas/vistaListadoIncidencias.php';
+    }
     public function listadoUsuarios()
     {
         // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
@@ -284,7 +321,7 @@ class controlador
 
 
         // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-        $resultModelo = $this->modelo->listado($inicio, $regsxpag);
+        $resultModelo = $this->modelo->listadoUsuarios($inicio, $regsxpag);
         // Si la consulta se realizó correctamente transferimos los datos obtenidos
         // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
         // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos

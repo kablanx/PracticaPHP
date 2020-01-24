@@ -8,7 +8,7 @@
                     <a class="nav-link" href="index.php?accion=controlUsuarios">Usuarios</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.php?accion=vistaIncidencias">Incidencias</a>
+                    <a class="nav-link" href="index.php?accion=vistaInicioIncidencias">Incidencias</a>
                 </li>
                 <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
                     <li class="nav-item">

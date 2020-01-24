@@ -31,7 +31,7 @@ class modelo
         return $return;
     }
 
-    public function listado($inicio, $regsxpag)
+    public function listadoUsuarios($inicio, $regsxpag)
     {
         $return = [
             "correcto" => FALSE,
@@ -61,7 +61,36 @@ class modelo
         }
         return $return;
     }
+    public function listadoIncidencias($inicio, $regsxpag)
+    {
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "datosPaginacion"=>Null,
+            "error" => NULL
+        ];
+        //Realizamos la consulta...
+        try {  //Definimos la instrucción SQL  
+            $sql="SELECT SQL_CALC_FOUND_ROWS * FROM incidencias LIMIT $inicio, $regsxpag";
+            // Hacemos directamente la consulta al no tener parámetros
+            $resultsquery = $this->conexion->query($sql);
 
+            // Para saber el número de páginas que hay
+            $totalRegistros=$this->conexion->query("SELECT FOUND_ROWS() as total");
+            $totalRegistros=$totalRegistros->fetch()["total"];
+            $numeroPaginas=ceil($totalRegistros/$regsxpag);
+
+            //Supervisamos si la inserción se realizó correctamente... 
+            if ($resultsquery) :
+                $return["correcto"] = TRUE;
+                $return["datos"] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+                $return["datosPaginacion"]= $numeroPaginas;
+            endif; // o no :(
+        } catch (PDOException $ex) {
+            $return["error"] = $ex->getMessage();
+        }
+        return $return;
+    }
     public function agregarUsuario($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $passwordSegura, $telefonoMovil, $telefonoFijo, $departamento, $rol){
         $return = [
             "correcto" => FALSE,

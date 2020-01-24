@@ -19,7 +19,7 @@
                 </p>
                 <div>
                     <a class="imgL" href="index.php?accion=controlUsuarios"><img class="imgP" src="../Assets/img/usuarios.png" /></a>
-                    <a class="imgR" href="index.php?accion=vistaIncidencias"><img class="imgP" src="../Assets/img/incidencia.png" /></a>
+                    <a class="imgR" href="index.php?accion=vistaInicioIncidencias"><img class="imgP" src="../Assets/img/incidencia.png" /></a>
 
                 </div>
                 <br>

@@ -6,10 +6,10 @@
 
 <body>
   <?php require_once 'includes/navbar.php'; ?>
-  <div class="">
-    <div class="cuerpo text-center">
+  <div class="text-center">
+    <div class="cuerpo">
       <p>
-        <h2><img class="alineadoTextoImagen" src="../Assets/img/user.png" width="50px" />Listar Usuarios</h2>
+        <h2><img class="alineadoTextoImagen" src="../Assets/img/user.png" width="50px" />Listar Incidencias</h2>
       </p>
     </div>
     <!--Mostramos los mensajes que se hayan generado al realizar el listado-->
@@ -22,18 +22,10 @@
 
       <table class="table table-striped">
         <tr>
-          <th>Nif</th>
-          <th>Nombre</th>
-          <th>Apellido1</th>
-          <th>Apellido2</th>
-          <!-- <th>Contraseña</th>-->
-          <th>Email</th>
-          <th>Nombre de usuario</th>
-          <th>Telefono Movil</th>
-          <th>Telefono Fijo</th>
+          <th>Id profesor</th>
           <th>Departamento</th>
-          <th>Aceptado</th>
-          <th>Rol</th>
+          <th>Mensaje</th>
+          <th>Estado</th>
           <!-- Añadimos una columna para las operaciones que podremos realizar con cada registro (sólo para el administrador)-->
           <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
             <th>Operaciones</th>
@@ -43,22 +35,14 @@
         <?php foreach ((array) $parametros["datos"] as $d) : ?>
           <!--Mostramos cada registro en una fila de la tabla-->
           <tr>
-            <td><?= $d["Nif"] ?></td>
-            <td><?= $d["Nombre"] ?></td>
-            <td><?= $d["Apellido1"] ?></td>
-            <td><?= $d["Apellido2"] ?></td>
-            <td><?= $d["Email"] ?></td>
-            <td><?= $d["NombreUsuario"] ?></td>
-            <td><?= $d["TelefonoMovil"] ?></td>
-            <td><?= $d["TelefonoFijo"] ?></td>
-
+            <td><?= $d["id_profesor"] ?></td>
             <!-- Campo departamento -->
             <?php
-              if($d["Departamento"]==1):
+              if($d["id_departamento"]==1):
             ?>
             <td>Informática</td>
             <?php
-              elseif($d["Departamento"]==2):
+              elseif($d["id_departamento"]==2):
             ?>
             <td>Administración</td>
             <?php
@@ -68,32 +52,18 @@
             <?php
               endif;
             ?>
-
-            <!-- Campo aceptado -->
-            <?php
-              if($d["Aceptado"]==1):
+            <?php 
+            if(strlen($d["mensaje"])>32):
             ?>
-            <td>Aceptado</td>
+            <td><a href="#">Pulse aquí para leer la descripcion completa</a></td>
             <?php
-              else:
+            else:
             ?>
-            <td>No aceptado</td>
-            <?php
-              endif;
+            <td><?= $d["mensaje"] ?></td>
+            <?php 
+            endif;
             ?>
-
-            <!-- Campo rol -->
-            <?php
-              if($d["Rol"]==1):
-            ?>
-            <td>Administrador</td>
-            <?php
-              else:
-            ?>
-            <td>Profesor</td>
-            <?php
-              endif;
-            ?>
+            <td><?= $d["estado"] ?></td>
 
             <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
               <td><a href="index.php?accion=editarUsuario&id=<?= $d['id'] ?>">Editar </a><a href="index.php?accion=borrarUsuario&id=<?= $d['id'] ?>"> Eliminar</a></td>
@@ -108,16 +78,16 @@
         <?php if ($pagina == 1) : ?>
           <li class="page-item disabled paginacion"><a class="page-link">&laquo;</a></li>
         <?php else : ?>
-          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoUsuarios&pagina=<?php echo $pagina - 1 ?>">&laquo;</a></li>
+          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoIncidencias&pagina=<?php echo $pagina - 1 ?>">&laquo;</a></li>
         <?php endif; ?>
 
         <?php
         $numeroPaginas = $parametros["datosPaginacion"];
         for ($i = 1; $i <= $numeroPaginas; $i++) {
           if ($pagina == $i) {
-            echo "<li class='page-item paginacion'><a class='page-link' href='index.php?accion=listadoUsuarios&pagina=$i'>$i</a></li>";
+            echo "<li class='page-item paginacion'><a class='page-link' href='index.php?accion=listadoIncidencias&pagina=$i'>$i</a></li>";
           } else {
-            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listadoUsuarios&pagina=$i'>$i</a></li>";
+            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listadoIncidencias&pagina=$i'>$i</a></li>";
           }
         }
         ?>
@@ -125,7 +95,7 @@
         <?php if ($pagina == $numeroPaginas) : ?>
           <li class="page-item disabled paginacion"><a class="page-link">&raquo;</a></li>
         <?php else : ?>
-          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoUsuarios&pagina=<?php echo $pagina + 1 ?>">&raquo;</a></li>
+          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoIncidencias&pagina=<?php echo $pagina + 1 ?>">&raquo;</a></li>
         <?php endif; ?>
 
       </ul>
