@@ -2,7 +2,7 @@
 <html lang="en">
 <!--  
 <head>
-    <?php // require_once 'includes/head.php'; 
+    <?php  require_once 'includes/head.php'; 
     ?>
 </head>
 -->
@@ -13,13 +13,8 @@
     </div>
     <div>
         <div class="container cuerpo">
-
-
-            <p>
-                <h2>
-                    <img class="alineadoTextoImagen" src="../Assets/img/user.png" width="50px" /> Login:</h2>
-            </p>
-        </div>
+                <h2><img class="alineadoTextoImagen" src="../Assets/img/user.png" width="50px" /> Login:</h2>
+             </div>
 
         <div>
             <!-- Para el recordar contraseña, falta crear la cookie -->
@@ -38,6 +33,7 @@
                                                                                             } ?>" />
                     </label><br />
                 </div>
+                <a href="index.php?accion=recuperarPassword">¿Olvidó su contraseña?</a><br><br>
                 <div class="form-group">
                     <label><input type="checkbox" class="form-check-input" name="recuerdo" value="on">Recuérdame :) </label>
                     <br />

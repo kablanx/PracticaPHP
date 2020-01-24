@@ -23,6 +23,11 @@ class controlador
         include_once 'vistas/login.php';
     }
 
+    public function recuperarPassword(){
+        $parametros = ["tituloventana" => "Recuperar contraseña"];
+        $this->includes();
+        include_once 'vistas/vistaRecuperarContraseña.php';
+    }
     // Página de registro
     public function registro()
     {
@@ -183,13 +188,13 @@ class controlador
 
     public function enviarIncidencia()
     {
-
+        
         $idProfesor = $_SESSION["logueado"]->id;
         $mensaje = $_POST["mensaje"];
         $idDepartamento = $_POST["departamento"];
         $urgente = $_POST["estado"];
         $mensaje = trim($mensaje);
-        if (isset($mensaje) && !empty($mensaje)) {
+        if (isset($mensaje) && !empty($mensaje) && $mensaje!="") {
 
             $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
             if ($resultado) {
