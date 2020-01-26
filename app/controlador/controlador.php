@@ -23,7 +23,8 @@ class controlador
         include_once 'vistas/login.php';
     }
 
-    public function recuperarPassword(){
+    public function recuperarPassword()
+    {
         $parametros = ["tituloventana" => "Recuperar contraseña"];
         $this->includes();
         include_once 'vistas/vistaRecuperarContraseña.php';
@@ -42,7 +43,8 @@ class controlador
         $this->includes();
         include_once 'vistas/vistaIncidencias.php';
     }
-    public function vistaInicioIncidencias(){
+    public function vistaInicioIncidencias()
+    {
         $parametros = ["tituloventana" => "Enviar incidencias"];
         $this->includes();
         include_once 'vistas/vistaInicioIncidencias.php';
@@ -59,8 +61,9 @@ class controlador
         $this->includes();
         include_once 'vistas/inicio.php';
     }
-    public function controlUsuarios(){
-        $parametros=["tituloventana" =>"Control de usuarios"];
+    public function controlUsuarios()
+    {
+        $parametros = ["tituloventana" => "Control de usuarios"];
         $this->includes();
         include_once "vistas/vistaInicioUsuarios.php";
     }
@@ -78,8 +81,9 @@ class controlador
 
         include_once 'vistas/editarUsuario.php';
     }
-    public function agregarUsuario(){
-        $parametros=["tituloventana"=>"Agregar usuario"];
+    public function agregarUsuario()
+    {
+        $parametros = ["tituloventana" => "Agregar usuario"];
         $this->includes();
         include_once "vistas/agregarUsuario.php";
     }
@@ -127,8 +131,9 @@ class controlador
         }
     }
 
-    public function enviarUsuario(){
-        $guardarUser=$this->validarAgregarUsuario();
+    public function enviarUsuario()
+    {
+        $guardarUser = $this->validarAgregarUsuario();
         if ($guardarUser["valido"] == true) {
             $nif = $_POST["nif"];
             $nombre = $_POST["nombre"];
@@ -140,7 +145,7 @@ class controlador
             $telefonoMovil = $_POST["telefonoMovil"];
             $telefonoFijo = $_POST["telefonoFijo"];
             $departamento = $_POST["departamento"];
-            $rol=$_POST["rol"];
+            $rol = $_POST["rol"];
 
             $resultado = $this->modelo->agregarUsuario($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $password, $telefonoMovil, $telefonoFijo, $departamento, $rol);
 
@@ -149,7 +154,7 @@ class controlador
                 $this->agregarUsuario();
             } else {
                 $this->agregarUsuario();
-            } 
+            }
         } else {
             $this->agregarUsuario();
         }
@@ -169,7 +174,7 @@ class controlador
             $telefonoMovil = $_POST["telefonoMovil"];
             $telefonoFijo = $_POST["telefonoFijo"];
 
-            
+
 
             // Probando otra forma
             $departamento = $_POST["departamento"];
@@ -186,15 +191,37 @@ class controlador
         }
     }
 
+    public function enviarRecuperarPassword()
+    {
+        $guardarUser = $this->validarRecuperarPassword();
+        if ($guardarUser["valido"] == true) {
+            $nif = $_POST["nif"];
+            $email = $_POST["email"];
+            $usuario = $_POST["usuario"];
+            $password=sha1($_POST["password"]);
+
+            $resultado = $this->modelo->recuperarPassword($nif, $usuario, $email, $password);
+            if($resultado){
+                echo "<div class='alert alert-success'>Se ha modificado la contraseña.</div>";
+                $this->recuperarPassword();
+            }else{
+                $_SESSION["errores"]["recuperado"]="Ha ocurrido un problema al recuperar la contraseña.";
+                $this->recuperarPassword();
+            }
+        }else{
+            $_SESSION["errores"]["recuperado"]="Los datos introducidos no son válidos.";
+                $this->recuperarPassword();
+        }
+    }
     public function enviarIncidencia()
     {
-        
+
         $idProfesor = $_SESSION["logueado"]->id;
         $mensaje = $_POST["mensaje"];
         $idDepartamento = $_POST["departamento"];
         $urgente = $_POST["estado"];
         $mensaje = trim($mensaje);
-        if (isset($mensaje) && !empty($mensaje) && $mensaje!="") {
+        if (isset($mensaje) && !empty($mensaje) && $mensaje != "") {
 
             $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
             if ($resultado) {
@@ -248,7 +275,6 @@ class controlador
             $resultado = $this->modelo->editar($id, $nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $password, $telefonoMovil, $telefonoFijo, $departamento, $aceptado, $rol);
 
             if ($resultado == true) {
-                echo "Se lo traga ;)";
                 $this->listadoUsuarios();
             } else {
                 echo "Ha ocurrido un error editar :(";
@@ -273,7 +299,8 @@ class controlador
         }
     }
 
-    public function listadoIncidencias(){
+    public function listadoIncidencias()
+    {
         $parametros = [
             "tituloventana" => "Listado de usuarios",
             "datos" => NULL,
@@ -285,7 +312,7 @@ class controlador
         $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
 
         $resultModelo = $this->modelo->listadoIncidencias($inicio, $regsxpag);
-        
+
         if ($resultModelo["correcto"]) :
             $parametros["datos"] = $resultModelo["datos"];
             $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
@@ -500,8 +527,52 @@ class controlador
         }
         return $guardarUser;
     }
+    public function validarRecuperarPassword()
+    {
+        if (isset($_POST)) {
+            $errores = array();
+            $nif = !empty($_POST["nif"]) ? $_POST["nif"] : false;
+            $email = !empty($_POST["email"]) ? $_POST["email"] : false;
+            $nombreUsuario = !empty($_POST["usuario"]) ? $_POST["usuario"] : false;
+            $password = !empty($_POST["password"]) ? $_POST["password"] : false;
+            // Validamos los datos
+            if (!empty($nif) &&  preg_match('/^[0-9]{8}[a-zA-Z]{1}$/', $nif)) {
+                $nifValido = true;
+            } else {
+                $nifValido = false;
+                $errores["nif"] = "El NIF introducido no es válido";
+            }
+            if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
-    public function validarAgregarUsuario(){
+                $errores["email"] = "El email introducido no es válido";
+                $emailValido = true;
+            } else {
+                $emailValido = false;
+            }
+            if (!empty($nombreUsuario) && !is_numeric($nombreUsuario) && !preg_match("/[0-9]/", $nombreUsuario)) {
+                $nombreUsuarioValido = true;
+            } else {
+                $nombreUsuarioValido = false;
+                $errores["nombreUsuario"] = "El nombre de usuario introducido no es válido.";
+            }
+            if (!empty($password) && !strlen($password) < 8 && preg_match("/[a-zA-Z ]/", $password) && preg_match("/[0-9]/", $password) && preg_match("/[@#-_%&^+=!?.,<>]/", $password)) {
+                $passwordValido = true;
+            } else {
+                $passwordValido = false;
+                $errores["password"] = "La contraseña no es valida";
+            }
+            $guardarUser = array();
+            $guardarUser["valido"] = false;
+            if (count($errores) == 0) {
+                $guardarUser["valido"] = true;
+            } else {
+                $_SESSION["errores"] = $errores;
+            }
+        }
+        return $guardarUser;
+    }
+    public function validarAgregarUsuario()
+    {
         if (isset($_POST)) {
 
             $errores = array();
@@ -586,7 +657,7 @@ class controlador
                 $errores["telefonoFijo"] = "El teléfono fijo introducido no es válido";
             }
 
-            
+
             $guardarUser = array();
             $guardarUser["valido"] = false;
             if (count($errores) == 0) {

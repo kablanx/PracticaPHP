@@ -36,25 +36,25 @@ class modelo
         $return = [
             "correcto" => FALSE,
             "datos" => NULL,
-            "datosPaginacion"=>Null,
+            "datosPaginacion" => Null,
             "error" => NULL
         ];
         //Realizamos la consulta...
         try {  //Definimos la instrucción SQL  
-            $sql="SELECT SQL_CALC_FOUND_ROWS * FROM usuarios LIMIT $inicio, $regsxpag";
+            $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM usuarios LIMIT $inicio, $regsxpag";
             // Hacemos directamente la consulta al no tener parámetros
             $resultsquery = $this->conexion->query($sql);
 
             // Para saber el número de páginas que hay
-            $totalRegistros=$this->conexion->query("SELECT FOUND_ROWS() as total");
-            $totalRegistros=$totalRegistros->fetch()["total"];
-            $numeroPaginas=ceil($totalRegistros/$regsxpag);
+            $totalRegistros = $this->conexion->query("SELECT FOUND_ROWS() as total");
+            $totalRegistros = $totalRegistros->fetch()["total"];
+            $numeroPaginas = ceil($totalRegistros / $regsxpag);
 
             //Supervisamos si la inserción se realizó correctamente... 
             if ($resultsquery) :
                 $return["correcto"] = TRUE;
                 $return["datos"] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
-                $return["datosPaginacion"]= $numeroPaginas;
+                $return["datosPaginacion"] = $numeroPaginas;
             endif; // o no :(
         } catch (PDOException $ex) {
             $return["error"] = $ex->getMessage();
@@ -66,32 +66,34 @@ class modelo
         $return = [
             "correcto" => FALSE,
             "datos" => NULL,
-            "datosPaginacion"=>Null,
+            "datosPaginacion" => Null,
             "error" => NULL
         ];
         //Realizamos la consulta...
         try {  //Definimos la instrucción SQL  
-            $sql="SELECT SQL_CALC_FOUND_ROWS * FROM incidencias LIMIT $inicio, $regsxpag";
+            $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM incidencias LIMIT $inicio, $regsxpag";
             // Hacemos directamente la consulta al no tener parámetros
             $resultsquery = $this->conexion->query($sql);
 
             // Para saber el número de páginas que hay
-            $totalRegistros=$this->conexion->query("SELECT FOUND_ROWS() as total");
-            $totalRegistros=$totalRegistros->fetch()["total"];
-            $numeroPaginas=ceil($totalRegistros/$regsxpag);
+            $totalRegistros = $this->conexion->query("SELECT FOUND_ROWS() as total");
+            $totalRegistros = $totalRegistros->fetch()["total"];
+            $numeroPaginas = ceil($totalRegistros / $regsxpag);
 
             //Supervisamos si la inserción se realizó correctamente... 
             if ($resultsquery) :
                 $return["correcto"] = TRUE;
                 $return["datos"] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
-                $return["datosPaginacion"]= $numeroPaginas;
+                $return["datosPaginacion"] = $numeroPaginas;
             endif; // o no :(
         } catch (PDOException $ex) {
             $return["error"] = $ex->getMessage();
         }
         return $return;
     }
-    public function agregarUsuario($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $passwordSegura, $telefonoMovil, $telefonoFijo, $departamento, $rol){
+
+    public function agregarUsuario($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $passwordSegura, $telefonoMovil, $telefonoFijo, $departamento, $rol)
+    {
         $return = [
             "correcto" => FALSE,
             "datos" => NULL,
@@ -100,7 +102,7 @@ class modelo
         try {
             $sql = "INSERT INTO usuarios (`id`, `Nif`, `Nombre`, `Apellido1`, `Apellido2`, `Email`, `NombreUsuario`, `PasswordSegura`, `TelefonoMovil`, `TelefonoFijo`, `Departamento`, `Aceptado`, `Rol`) VALUES (null,:nif,:nombre,:apellido1,:apellido2,:email,:nombreUsuario,:passwordSegura,:telefonoMovil,:telefonoFijo,:departamento, 1, :rol);";
             $query = $this->conexion->prepare($sql);
-            $query->execute(['nif' => $nif, 'nombre' => $nombre, 'apellido1' => $apellido1, 'apellido2' => $apellido2, 'email' => $email, 'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura, 'telefonoMovil' => $telefonoMovil, 'telefonoFijo' => $telefonoFijo, 'departamento' => $departamento, 'rol'=>$rol]);
+            $query->execute(['nif' => $nif, 'nombre' => $nombre, 'apellido1' => $apellido1, 'apellido2' => $apellido2, 'email' => $email, 'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura, 'telefonoMovil' => $telefonoMovil, 'telefonoFijo' => $telefonoFijo, 'departamento' => $departamento, 'rol' => $rol]);
 
             if ($query) {
                 $resultado = true;
@@ -212,7 +214,26 @@ class modelo
         }
         return $resultado;
     }
-
+    public function recuperarPassword($nif, $nombreUsuario, $email, $passwordSegura)
+    {
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "error" => NULL
+        ];
+        try {  //Definimos la instrucción SQL  
+        $sql = "UPDATE usuarios SET PasswordSegura=:passwordSegura WHERE Nif=:nif AND NombreUsuario=:nombreUsuario AND Email=:email";
+        $resultsquery = $this->conexion->prepare($sql);
+        $resultsquery->execute(['nif' => $nif, 'email' => $email,'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura]);
+        //Supervisamos si la inserción se realizó correctamente... 
+        if ($resultsquery) :
+            $return["correcto"] = TRUE;
+        endif; // o no :(
+        } catch (PDOException $ex) {
+            $return["error"] = $ex->getMessage();
+        }
+        return $return;
+    }
     public function enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $estado)
     {
         $sql = "INSERT INTO incidencias (`id`, `id_profesor`, `id_departamento`, `mensaje`, `estado`) VALUES (null,:idProfesor,:idDepartamento,:mensaje,:estado);";

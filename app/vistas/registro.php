@@ -2,15 +2,15 @@
 <html lang="en">
 
 <head>
-
+    <?php require_once "includes/head.php"; ?>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 
-<body class="text-center">
-    <!-- Encabezado -->
-    <div class="encabezado">
-        <h1>DAWES-Práctica</h1>
+<body>
+    <div class="centrar container">
     </div>
+    <!-- Encabezado -->
+    <?php require_once "includes/encabezado.php"; ?>
 
     <!-- PREGUNTAR
     Sobre el atributo max-width del container. Para saber si es responsive o puedo asignarle algún valor
@@ -19,12 +19,12 @@
         <div class="text-left font-large">
             <a href="index.php?accion=index">Inicio</a>
         </div>
-        <div>
+        <div class="text-center">
 
             <h2><img class="alineadoTextoImagen" src="../Assets/img/user.png" width="50px" /> Registro:</h2>
 
         </div>
-        <div>
+        <div class="centrar container">
             <form id="form-login" class="form" action="index.php?accion=enviarRegistro" method="post" enctype="multipart/form-data">
                 <!-- NIF -->
                 <div class="form-group">
@@ -91,7 +91,7 @@
                     </select>
                 </div>
                 <!-- Captcha -->
-                <div class="form-group g-recaptcha" data-sitekey="6LfhQMkUAAAAAEe6IEqXzE3B4KiCQxoIONSAqBwl"></div>
+                <div class="form-group g-recaptcha text-left" data-sitekey="6LfhQMkUAAAAAEe6IEqXzE3B4KiCQxoIONSAqBwl"></div>
                 <span><?php echo isset($_SESSION['errores']) ? mostrarError($_SESSION['errores'], 'captcha') : "" ?></span>
                 <div>
                     <input name="submit" type="submit" id="boton" value="Registrar" class="boton" />
@@ -103,6 +103,7 @@
         </div>
         <!-- Salto de línea para que el botón no quede pegado a la parte inferior de la pantalla -->
         <br>
+    </div>
     </div>
 
 </body>
