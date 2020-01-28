@@ -96,6 +96,142 @@ class controlador
         }
         $this->index();
     }
+
+    public function listadoUsuariosAceptado(){
+        // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
+        $parametros = [
+            "tituloventana" => "Listado de usuarios",
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "mensajes" => []
+        ];
+
+        //Establecemos el número de registros a mostrar por página,por defecto 5
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 5;
+        //Establecemos el la página que vamos a mostrar, por página,por defecto la 1
+        $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
+
+        //Definimos la variable $inicio que indique la posición del registro desde el que se
+        // mostrarán los registros de una página dentro de la paginación.
+        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+
+        // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
+        $resultModelo = $this->modelo->listadoUsuariosAceptado($inicio, $regsxpag);
+        // Si la consulta se realizó correctamente transferimos los datos obtenidos
+        // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
+        // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
+        if ($resultModelo["correcto"]) :
+            $parametros["datos"] = $resultModelo["datos"];
+            $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
+            //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+            $this->mensajes[] = [
+                "tipo" => "success",
+                "mensaje" => "El listado se realizó correctamente"
+            ];
+        else :
+            //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+            $this->mensajes[] = [
+                "tipo" => "danger",
+                "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$parametros["error"]})"
+            ];
+        endif;
+        //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
+        //'mensaje', que recoge cómo finalizó la operación:
+        $parametros["mensajes"] = $this->mensajes;
+        // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
+        include_once 'vistas/vistaUsuariosListadoAceptado.php';
+    }
+    public function listadoUsuariosNombreUsuario(){
+        // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
+        $parametros = [
+            "tituloventana" => "Listado de usuarios",
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "mensajes" => []
+        ];
+
+        //Establecemos el número de registros a mostrar por página,por defecto 5
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 5;
+        //Establecemos el la página que vamos a mostrar, por página,por defecto la 1
+        $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
+
+        //Definimos la variable $inicio que indique la posición del registro desde el que se
+        // mostrarán los registros de una página dentro de la paginación.
+        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+
+        // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
+        $resultModelo = $this->modelo->listadoUsuariosNombreUsuario($inicio, $regsxpag);
+        // Si la consulta se realizó correctamente transferimos los datos obtenidos
+        // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
+        // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
+        if ($resultModelo["correcto"]) :
+            $parametros["datos"] = $resultModelo["datos"];
+            $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
+            //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+            $this->mensajes[] = [
+                "tipo" => "success",
+                "mensaje" => "El listado se realizó correctamente"
+            ];
+        else :
+            //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+            $this->mensajes[] = [
+                "tipo" => "danger",
+                "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$parametros["error"]})"
+            ];
+        endif;
+        //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
+        //'mensaje', que recoge cómo finalizó la operación:
+        $parametros["mensajes"] = $this->mensajes;
+        // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
+        include_once 'vistas/usuariosListadoNombreUsuario.php';
+    }
+    public function listadoUsuariosRol(){
+        // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
+        $parametros = [
+            "tituloventana" => "Listado de usuarios",
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "mensajes" => []
+        ];
+
+        //Establecemos el número de registros a mostrar por página,por defecto 5
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 5;
+        //Establecemos el la página que vamos a mostrar, por página,por defecto la 1
+        $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
+
+        //Definimos la variable $inicio que indique la posición del registro desde el que se
+        // mostrarán los registros de una página dentro de la paginación.
+        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+
+        // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
+        $resultModelo = $this->modelo->listadoUsuariosRol($inicio, $regsxpag);
+        // Si la consulta se realizó correctamente transferimos los datos obtenidos
+        // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
+        // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
+        if ($resultModelo["correcto"]) :
+            $parametros["datos"] = $resultModelo["datos"];
+            $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
+            //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+            $this->mensajes[] = [
+                "tipo" => "success",
+                "mensaje" => "El listado se realizó correctamente"
+            ];
+        else :
+            //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+            $this->mensajes[] = [
+                "tipo" => "danger",
+                "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$parametros["error"]})"
+            ];
+        endif;
+        //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
+        //'mensaje', que recoge cómo finalizó la operación:
+        $parametros["mensajes"] = $this->mensajes;
+        // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
+        include_once 'vistas/vistaUsuariosListadoRol.php';
+    }
     public function logueado()
     {
         $this->includes();
