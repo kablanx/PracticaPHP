@@ -38,29 +38,29 @@
             <td><?= $d["id_profesor"] ?></td>
             <!-- Campo departamento -->
             <?php
-              if($d["id_departamento"]==1):
+            if ($d["id_departamento"] == 1) :
             ?>
-            <td>Informática</td>
+              <td>Informática</td>
             <?php
-              elseif($d["id_departamento"]==2):
+            elseif ($d["id_departamento"] == 2) :
             ?>
-            <td>Administración</td>
+              <td>Administración</td>
             <?php
-              else:
+            else :
             ?>
-            <td>Comercio</td>
+              <td>Comercio</td>
             <?php
-              endif;
+            endif;
             ?>
-            <?php 
-            if(strlen($d["mensaje"])>32):
-            ?>
-            <td><a href="#">Pulse aquí para leer la descripcion completa</a></td>
             <?php
-            else:
+            if (strlen($d["mensaje"]) > 32) :
             ?>
-            <td><?= $d["mensaje"] ?></td>
-            <?php 
+              <td><a href="#" onclick="alert('<?php echo $d['mensaje'] ?>')">Pulse aquí para leer la descripcion completa</a></td>
+            <?php
+            else :
+            ?>
+              <td><?= $d["mensaje"] ?></td>
+            <?php
             endif;
             ?>
             <td><?= $d["estado"] ?></td>

@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-<?php require_once 'includes/head.php'; ?>
-</head>
-
 <body>
     <!-- Barra de navegación -->
-    <?php require_once "includes/navbar.php";?>
+    <?php require_once "includes/navbar.php"; ?>
     <div class="centrar container">
         <div class="text-center">
 
@@ -95,18 +90,24 @@
                         <option value="1">Administrador</option>
                     </select>
                 </div>
-                
                 <div>
                     <input name="submit" type="submit" id="boton" value="Editar" class="boton" />
                 </div>
-
             </form>
             <?php
             borrarErrores() ?>
         </div>
 
     </div>
-
+    <!-- <textarea name="nifa" id="nifa"></textarea>
+    <script>
+      CKEDITOR.replace('nifa');
+    </script> -->
+    <div id="editor">This is some sample content.</div>
+    <script>
+        InlineEditor
+            .create(document.querySelector('#editor'));
+    </script>
 </body>
 
 </html>

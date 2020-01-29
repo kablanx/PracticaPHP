@@ -1,8 +1,6 @@
 <html>
 
-<head>
-  <?php require_once 'includes/head.php'; ?>
-</head>
+
 
 <body>
   <?php require_once 'includes/navbar.php'; ?>
@@ -54,45 +52,45 @@
 
             <!-- Campo departamento -->
             <?php
-              if($d["Departamento"]==1):
+            if ($d["Departamento"] == 1) :
             ?>
-            <td>Informática</td>
+              <td>Informática</td>
             <?php
-              elseif($d["Departamento"]==2):
+            elseif ($d["Departamento"] == 2) :
             ?>
-            <td>Administración</td>
+              <td>Administración</td>
             <?php
-              else:
+            else :
             ?>
-            <td>Comercio</td>
+              <td>Comercio</td>
             <?php
-              endif;
+            endif;
             ?>
 
             <!-- Campo aceptado -->
             <?php
-              if($d["Aceptado"]==1):
+            if ($d["Aceptado"] == 1) :
             ?>
-            <td>Aceptado</td>
+              <td>Aceptado</td>
             <?php
-              else:
+            else :
             ?>
-            <td>No aceptado</td>
+              <td>No aceptado</td>
             <?php
-              endif;
+            endif;
             ?>
 
             <!-- Campo rol -->
             <?php
-              if($d["Rol"]==1):
+            if ($d["Rol"] == 1) :
             ?>
-            <td>Administrador</td>
+              <td>Administrador</td>
             <?php
-              else:
+            else :
             ?>
-            <td>Profesor</td>
+              <td>Profesor</td>
             <?php
-              endif;
+            endif;
             ?>
 
             <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
@@ -102,6 +100,8 @@
         <?php endforeach; ?>
       </table>
     </div>
+    
+    
     <div>
 
       <ul class="pagination">

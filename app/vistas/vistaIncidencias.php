@@ -15,7 +15,7 @@
             <form action="index.php?accion=enviarIncidencia" method="POST">
                 <div class="form-group">
                     <label for="mensaje">Descripción:</label><br />
-                    <textarea cols="59" rows="6" id="mensaje" name="mensaje"></textarea>
+                    <textarea cols="59" rows="6" id="mensaje" name="mensaje" maxlength="245"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="departamento">Departamento:</label><br />

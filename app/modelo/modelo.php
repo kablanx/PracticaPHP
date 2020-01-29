@@ -61,7 +61,8 @@ class modelo
         }
         return $return;
     }
-    public function listadoUsuariosAceptado($inicio, $regsxpag){
+    public function listadoUsuariosAceptado($inicio, $regsxpag)
+    {
         $return = [
             "correcto" => FALSE,
             "datos" => NULL,
@@ -90,7 +91,8 @@ class modelo
         }
         return $return;
     }
-    public function listadoUsuariosNombreUsuario($inicio, $regsxpag){
+    public function listadoUsuariosNombre($inicio, $regsxpag)
+    {
         $return = [
             "correcto" => FALSE,
             "datos" => NULL,
@@ -119,7 +121,8 @@ class modelo
         }
         return $return;
     }
-    public function listadoUsuariosRol($inicio, $regsxpag){
+    public function listadoUsuariosRol($inicio, $regsxpag)
+    {
         $return = [
             "correcto" => FALSE,
             "datos" => NULL,
@@ -309,13 +312,13 @@ class modelo
             "error" => NULL
         ];
         try {  //Definimos la instrucción SQL  
-        $sql = "UPDATE usuarios SET PasswordSegura=:passwordSegura WHERE Nif=:nif AND NombreUsuario=:nombreUsuario AND Email=:email";
-        $resultsquery = $this->conexion->prepare($sql);
-        $resultsquery->execute(['nif' => $nif, 'email' => $email,'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura]);
-        //Supervisamos si la inserción se realizó correctamente... 
-        if ($resultsquery) :
-            $return["correcto"] = TRUE;
-        endif; // o no :(
+            $sql = "UPDATE usuarios SET PasswordSegura=:passwordSegura WHERE Nif=:nif AND NombreUsuario=:nombreUsuario AND Email=:email";
+            $resultsquery = $this->conexion->prepare($sql);
+            $resultsquery->execute(['nif' => $nif, 'email' => $email, 'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura]);
+            //Supervisamos si la inserción se realizó correctamente... 
+            if ($resultsquery) :
+                $return["correcto"] = TRUE;
+            endif; // o no :(
         } catch (PDOException $ex) {
             $return["error"] = $ex->getMessage();
         }
@@ -338,8 +341,6 @@ class modelo
         try {
             if ($tipo == "1") {
                 $sql = "SELECT * FROM usuarios WHERE Aceptado = 1";
-            } else {
-                $sql = "SELECT * FROM usuarios WHERE Aceptado = 0";
             }
             $query = $this->conexion->query($sql);
 
@@ -347,37 +348,42 @@ class modelo
             if (isset($query)) {
                 $listado = $query->fetchAll(PDO::FETCH_ASSOC);
                 $contenido = "";
-                if ($tipo == "1") :
-                    $contenido .= '<h1>Listado de usuarios activos</h1><br>';
-                else :
-                    $contenido .= '<h1>Listado de usuarios inactivos</h1><br>';
-                endif;
+                $contenido .= '<h1>Listado de usuarios activos</h1><br>';
+
                 $contenido .= '<table cellspacing="1" border="1">';
                 $contenido .= '<tr>
                 <th>NIF</th>
                 <th>Nombre</th>
                 <th>Apellidos</th>
-                <th>Móvil</th>
-                            <th>Email</th>
-                            <th>Departamento</th>
-                <th>Tipo de Usuario</th>
-                <th>UsuarioLogin</th>
-                
-                
+                <th>Email</th>
+                <th>Nombre usuario</th>
+                <th>Teléfono móvil</th>
+                <th>Teléfono fijo</th>
+                <th>Departamento</th>
+                <th>Rol</th>
             </tr>';
                 foreach ($listado as $u) {
                     $contenido .= '<tr class="table-info">
                 <td>' . $u["Nif"] . '</td>
                 <td>' . $u["Nombre"] . '</td>
                 <td>' . $u["Apellido1"] . ' ' . $u["Apellido2"] . '</td>
-                
-                            <td>' . $u["Email"] . '</td>
-                            
+                <td>' . $u["Email"] . '</td>
                 <td>' . $u["NombreUsuario"] . '</td>
                 <td>' . $u["TelefonoMovil"] . '</td>
-                <td>' . $u["TelefonoFijo"] . '</td>
-                <td>' . $u["Departamento"] . '</td>
-                </tr>';
+                <td>' . $u["TelefonoFijo"] . '</td>';
+                    if ($u["Departamento"] == 1) {
+                        $contenido .= '<td>Informática</td>';
+                    } else if ($u["Departamento"] == 2) {
+                        $contenido .= '<td>Administración</td>';
+                    } else {
+                        $contenido .= '<td>Comercio</td>';
+                    }
+                    if ($u["Rol"] == 1) {
+                        $contenido .= '<td>Administrador</td>';
+                    } else {
+                        $contenido .= '<td>Profesor</td>';
+                    }
+                    $contenido .= '</tr>';
                 }
                 $contenido .= '</table>';
             } else

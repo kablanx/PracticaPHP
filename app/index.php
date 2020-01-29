@@ -3,9 +3,8 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>
-    <title></title>
+<?php require_once 'vistas/includes/head.php'; ?>
+    
 </head>
 
 <body>

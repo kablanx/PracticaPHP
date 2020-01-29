@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
 
-
-
 <body>
 
 
@@ -18,10 +16,10 @@
                         <img class="alineadoTextoImagen" src="../Assets/img/user.png" width="50px" />Panel de control</h2>
                 </p>
                 <div>
-                    <a class="imgL" href="index.php?accion=controlUsuarios"><img class="imgP" src="../Assets/img/usuarios.png" /></a>
-                    <a class="imgR" href="index.php?accion=vistaInicioIncidencias"><img class="imgP" src="../Assets/img/incidencia.png" /></a>
-
+                    <a class="imgL" href="index.php?accion=agregarUsuario"><img class="imgP" src="../Assets/img/usuarios.png" /></a>
+                    <a class="imgR" href="index.php?accion=vistaEnviarIncidencias"><img class="imgP" src="../Assets/img/incidencia.png" /></a>
                 </div>
+                
                 <br>
                 <div>
                     <a class="imgL" href="#"><img class="imgP" src="../Assets/img/correo.png" /></a>

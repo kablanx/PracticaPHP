@@ -69,7 +69,6 @@ class controlador
     }
     public function includes()
     {
-        include_once 'vistas/includes/head.php';
         require_once 'vistas/includes/helpers.php';
     }
     public function editarUsuario()
@@ -142,7 +141,7 @@ class controlador
         // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
         include_once 'vistas/vistaUsuariosListadoAceptado.php';
     }
-    public function listadoUsuariosNombreUsuario(){
+    public function listadoUsuariosNombre(){
         // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
         $parametros = [
             "tituloventana" => "Listado de usuarios",
@@ -162,7 +161,7 @@ class controlador
 
 
         // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-        $resultModelo = $this->modelo->listadoUsuariosNombreUsuario($inicio, $regsxpag);
+        $resultModelo = $this->modelo->listadoUsuariosNombre($inicio, $regsxpag);
         // Si la consulta se realizó correctamente transferimos los datos obtenidos
         // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
         // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
@@ -423,15 +422,24 @@ class controlador
 
     public function borrarUsuario()
     {
-
-        if (isset($_GET["id"]) && is_numeric($_GET["id"])) {
+        if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_SESSION["logueado"]->Rol==$_GET["id"]) {
+            echo "<div class='alert alert-danger'>No puede borrar su usuario.</div>";
+            $this->inicioLogueado();
+        }
+        elseif (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_SESSION["logueado"]->Rol==1) {
             $id = $_GET["id"];
             $resultModelo = $this->modelo->borrarUsuario($id);
             if ($resultModelo["correcto"]) {
-                header("Location:index.php?accion=listado");
+                echo "<div class='alert alert-success'>Usuario borrado correctamente.</div>";
+                $this->inicioLogueado();
+                /* header("Location:index.php?accion=listado"); */
             } else {
                 echo "<div class='alert alert-danger'>Ha ocurrido un error.</div>";
+                $this->inicioLogueado();
             }
+        }else{
+            echo "<div class='alert alert-danger'>Ha ocurrido un error.</div>";
+            $this->inicioLogueado();
         }
     }
 
@@ -905,7 +913,9 @@ class controlador
         require_once 'pdf/vendor/autoload.php';
         ob_start();
         $content = $this->modelo->listadoPdf($_GET['aceptado']);
-        $html2pdf = new Spipu\Html2Pdf\Html2Pdf('P', 'A4', 'es');
+
+        
+        $html2pdf = new Spipu\Html2Pdf\Html2Pdf('L', 'A4', 'es'); // L para que sea horizontal, P para que sea vertical
         $html2pdf->pdf->SetDisplayMode('fullpage');
         $html2pdf->writeHTML($content);
         $html2pdf->output('listado.pdf');
