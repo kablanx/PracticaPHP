@@ -31,6 +31,37 @@ class modelo
         return $return;
     }
 
+    public function listadoLogsFecha($inicio, $regsxpag)
+    {
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "error" => NULL
+        ];
+        //Realizamos la consulta...
+        try {  //Definimos la instrucción SQL  
+            $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM logs ORDER BY `fecha` LIMIT $inicio, $regsxpag";
+            // Hacemos directamente la consulta al no tener parámetros
+            $resultsquery = $this->conexion->query($sql);
+
+            // Para saber el número de páginas que hay
+            $totalRegistros = $this->conexion->query("SELECT FOUND_ROWS() as total");
+            $totalRegistros = $totalRegistros->fetch()["total"];
+            $numeroPaginas = ceil($totalRegistros / $regsxpag);
+
+            //Supervisamos si la inserción se realizó correctamente... 
+            if ($resultsquery) :
+                $return["correcto"] = TRUE;
+                $return["datos"] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+                $return["datosPaginacion"] = $numeroPaginas;
+            endif; // o no :(
+        } catch (PDOException $ex) {
+            $return["error"] = $ex->getMessage();
+        }
+        return $return;
+    }
+
     public function listadoUsuarios($inicio, $regsxpag)
     {
         $return = [
@@ -151,6 +182,69 @@ class modelo
         }
         return $return;
     }
+
+    public function listadoIncidenciasFecha($inicio, $regsxpag)
+    {
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "error" => NULL
+        ];
+        //Realizamos la consulta...
+        try {  //Definimos la instrucción SQL  
+            $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM incidencias ORDER BY `fecha` LIMIT $inicio, $regsxpag";
+            // Hacemos directamente la consulta al no tener parámetros
+            $resultsquery = $this->conexion->query($sql);
+
+            // Para saber el número de páginas que hay
+            $totalRegistros = $this->conexion->query("SELECT FOUND_ROWS() as total");
+            $totalRegistros = $totalRegistros->fetch()["total"];
+            $numeroPaginas = ceil($totalRegistros / $regsxpag);
+
+            //Supervisamos si la inserción se realizó correctamente... 
+            if ($resultsquery) :
+                $return["correcto"] = TRUE;
+                $return["datos"] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+                $return["datosPaginacion"] = $numeroPaginas;
+            endif; // o no :(
+        } catch (PDOException $ex) {
+            $return["error"] = $ex->getMessage();
+        }
+        return $return;
+    }
+
+    public function listadoIncidenciasDepartamento($inicio, $regsxpag)
+    {
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "error" => NULL
+        ];
+        //Realizamos la consulta...
+        try {  //Definimos la instrucción SQL  
+            $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM incidencias ORDER BY `id_departamento` LIMIT $inicio, $regsxpag";
+            // Hacemos directamente la consulta al no tener parámetros
+            $resultsquery = $this->conexion->query($sql);
+
+            // Para saber el número de páginas que hay
+            $totalRegistros = $this->conexion->query("SELECT FOUND_ROWS() as total");
+            $totalRegistros = $totalRegistros->fetch()["total"];
+            $numeroPaginas = ceil($totalRegistros / $regsxpag);
+
+            //Supervisamos si la inserción se realizó correctamente... 
+            if ($resultsquery) :
+                $return["correcto"] = TRUE;
+                $return["datos"] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+                $return["datosPaginacion"] = $numeroPaginas;
+            endif; // o no :(
+        } catch (PDOException $ex) {
+            $return["error"] = $ex->getMessage();
+        }
+        return $return;
+    }
+
     public function listadoIncidencias($inicio, $regsxpag)
     {
         $return = [
@@ -258,6 +352,42 @@ class modelo
         return $return;
     }
 
+    public function borrarIncidencia($id)
+    {
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "error" => NULL
+        ];
+        try {
+            $sql = "DELETE FROM incidencias WHERE id=:id";
+            $query = $this->conexion->prepare($sql);
+            $query->execute(['id' => $id]);
+            if ($query) {
+                $return["correcto"] = TRUE;
+            }
+        } catch (PDOException $ex) {
+            echo '<div class="alert alert-danger">' . "Ha ocurrido un error con la eliminación de la incidencia!! ):" . '</div>';
+            header("Location:index.php?accion=inicioLogueado");
+        }
+        return $return;
+    }
+
+    public function seleccionarUsuario($id){
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "error" => NULL
+        ];
+        $sql = "SELECT * FROM usuarios WHERE `id`=:id;";
+        $query = $this->conexion->prepare($sql);
+        // Ejecutamos y le pasamos los valores 
+        $query->bindParam(':id', $id);
+        $query->execute();
+        $datos = $query->fetch(PDO::FETCH_OBJ);
+        return $datos;
+    }
+    
     public function validarLogin($usuario, $passwordlogin)
     {
 
@@ -282,6 +412,7 @@ class modelo
         $query->bindParam(':passwordlogin', $passwordlogin);
         $query->execute();
         $datos = $query->fetch(PDO::FETCH_OBJ);
+        var_dump($datos);
         //var_dump();
         //die();
         //var_dump($datos);
@@ -326,7 +457,7 @@ class modelo
     }
     public function enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $estado)
     {
-        $sql = "INSERT INTO incidencias (`id`, `id_profesor`, `id_departamento`, `mensaje`, `estado`) VALUES (null,:idProfesor,:idDepartamento,:mensaje,:estado);";
+        $sql = "INSERT INTO incidencias (`id`, `id_profesor`, `id_departamento`, `mensaje`, `estado`, `fecha`) VALUES (null,:idProfesor,:idDepartamento,:mensaje,:estado, CURRENT_TIME);";
         $query = $this->conexion->prepare($sql);
         $query->execute(['idProfesor' => $idProfesor, 'idDepartamento' => $idDepartamento, 'mensaje' => $mensaje, 'estado' => $estado]);
         if ($query) {
@@ -336,6 +467,50 @@ class modelo
         }
         return $resultado;
     }
+    public function logEditar($idProfesor){
+        $sql="INSERT INTO logs (`id`, `id_profesor`, `descripcion`, `fecha`) VALUES (null, :id, 'Ha editado un usuario', CURRENT_TIMESTAMP);";
+        $query = $this->conexion->prepare($sql);
+        $query->execute(["id"=>$idProfesor]);
+        if($query){
+            $resultado=true;
+        }else{
+            $resultado=false;
+        }
+        return $resultado;
+    }
+    public function logLogin($idProfesor){
+        $sql="INSERT INTO logs (`id`, `id_profesor`, `descripcion`, `fecha`) VALUES (null, :id, 'Ha iniciado sesion', CURRENT_TIMESTAMP);";
+        $query = $this->conexion->prepare($sql);
+        $query->execute(["id"=>$idProfesor]);
+        if($query){
+            $resultado=true;
+        }else{
+            $resultado=false;
+        }
+        return $resultado;
+    }
+    public function logEliminarUsuario($idProfesor){
+        $sql="INSERT INTO logs (`id`, `id_profesor`, `descripcion`, `fecha`) VALUES (null, :id, 'Ha eliminado un usuario', CURRENT_TIMESTAMP);";
+        $query = $this->conexion->prepare($sql);
+        $query->execute(["id"=>$idProfesor]);
+        if($query){
+            $resultado=true;
+        }else{
+            $resultado=false;
+        }
+        return $resultado;
+    }
+    /* public function logEliminarIncidencia($idProfesor){
+        $sql="INSERT INTO logs (`id`, `id_profesor`, `descripcion`, `fecha`) VALUES (null, :id, 'Ha eliminado un usuario', CURRENT_DATE);";
+        $query = $this->conexion->prepare($sql);
+        $query->execute(["id"=>$idProfesor]);
+        if($query){
+            $resultado=true;
+        }else{
+            $resultado=false;
+        }
+        return $resultado;
+    } */
     public function listadoPdf($tipo)
     {
         try {

@@ -18,8 +18,13 @@
     <div class="tabla">
 
 
+    
       <table class="table table-striped">
         <tr>
+        <?php 
+        if ($_SESSION["logueado"]->Rol == 1) : ?>
+            <th>Id</th>
+          <?php endif; ?>
           <th>Nif</th>
           <th>Nombre</th>
           <th>Apellido1</th>
@@ -41,6 +46,10 @@
         <?php foreach ((array) $parametros["datos"] as $d) : ?>
           <!--Mostramos cada registro en una fila de la tabla-->
           <tr>
+          <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
+            <td><?= $d["id"] ?></td>
+          <?php endif; ?>
+            
             <td><?= $d["Nif"] ?></td>
             <td><?= $d["Nombre"] ?></td>
             <td><?= $d["Apellido1"] ?></td>
@@ -100,8 +109,8 @@
         <?php endforeach; ?>
       </table>
     </div>
-    
-    
+
+
     <div>
 
       <ul class="pagination">

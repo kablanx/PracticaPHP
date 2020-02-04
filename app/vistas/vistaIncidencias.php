@@ -15,6 +15,16 @@
             <form action="index.php?accion=enviarIncidencia" method="POST">
                 <div class="form-group">
                     <label for="mensaje">Descripción:</label><br />
+                    <script>
+                        $(document).ready(function() {
+                            $('#mensaje').keypress(function(event) {
+
+                                if (event.keyCode == 13) {
+                                    event.preventDefault();
+                                }
+                            });
+                        });
+                    </script>
                     <textarea cols="59" rows="6" id="mensaje" name="mensaje" maxlength="245"></textarea>
                 </div>
                 <div class="form-group">
@@ -32,7 +42,7 @@
                         <option value="Urgente">Urgente</option>
                     </select>
                 </div>
-                <input type="submit" value="Enviar" name="enviar" class="btn btn-success"/>
+                <input type="submit" value="Enviar" name="enviar" class="btn btn-success" />
             </form>
         </div>
     </div>

@@ -75,9 +75,14 @@ class controlador
     {
         $parametros = ["tituloventana" => "Editar"];
         $this->includes();
+
         // Guardamos el id que queremos editar para poder usarlo más adelante.
         $_SESSION["idEditar"] = $_GET["id"];
 
+        // Intento de otra forma, para que salgan los campos del registro a editar
+        $id = $_GET["id"];
+        $resultado = $this->modelo->seleccionarUsuario($id);
+        $_SESSION["editar"] = $resultado;
         include_once 'vistas/editarUsuario.php';
     }
     public function agregarUsuario()
@@ -96,7 +101,8 @@ class controlador
         $this->index();
     }
 
-    public function listadoUsuariosAceptado(){
+    public function listadoUsuariosAceptado()
+    {
         // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
         $parametros = [
             "tituloventana" => "Listado de usuarios",
@@ -141,7 +147,8 @@ class controlador
         // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
         include_once 'vistas/vistaUsuariosListadoAceptado.php';
     }
-    public function listadoUsuariosNombre(){
+    public function listadoUsuariosNombre()
+    {
         // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
         $parametros = [
             "tituloventana" => "Listado de usuarios",
@@ -184,9 +191,10 @@ class controlador
         //'mensaje', que recoge cómo finalizó la operación:
         $parametros["mensajes"] = $this->mensajes;
         // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
-        include_once 'vistas/usuariosListadoNombreUsuario.php';
+        include_once 'vistas/usuariosListadoNombre.php';
     }
-    public function listadoUsuariosRol(){
+    public function listadoUsuariosRol()
+    {
         // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
         $parametros = [
             "tituloventana" => "Listado de usuarios",
@@ -249,8 +257,9 @@ class controlador
 
             $resultado = $this->modelo->validarLogin($usuario, $password);
             if ($resultado->Rol === "0" || $resultado->Rol === "1") {
-                if ($resultado->Aceptado == "1") {
+                if ($resultado->Aceptado == 1) {
                     $_SESSION["logueado"] = $resultado;
+                    $this->logLogin();
                     $this->inicioLogueado();
                 } else {
                     $_SESSION["errores"]["noaceptado"] = "Todavia no ha sido aceptado, espere.";
@@ -316,7 +325,7 @@ class controlador
             $resultado = $this->modelo->registro($nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $password, $telefonoMovil, $telefonoFijo, $departamento);
 
             if ($resultado == true) {
-                $_SESSION["errores"]["registrado"] = "<strong>Enhorabuena, te has registrado correctamente.</strong>";
+                echo "<div class='alert alert-success'>Enhorabuena, te has registrado correctamente.</div>";
                 $this->index();
             } else {
                 $this->registro();
@@ -333,19 +342,19 @@ class controlador
             $nif = $_POST["nif"];
             $email = $_POST["email"];
             $usuario = $_POST["usuario"];
-            $password=sha1($_POST["password"]);
+            $password = sha1($_POST["password"]);
 
             $resultado = $this->modelo->recuperarPassword($nif, $usuario, $email, $password);
-            if($resultado){
+            if ($resultado) {
                 echo "<div class='alert alert-success'>Se ha modificado la contraseña.</div>";
                 $this->recuperarPassword();
-            }else{
-                $_SESSION["errores"]["recuperado"]="Ha ocurrido un problema al recuperar la contraseña.";
+            } else {
+                $_SESSION["errores"]["recuperado"] = "Ha ocurrido un problema al recuperar la contraseña.";
                 $this->recuperarPassword();
             }
-        }else{
-            $_SESSION["errores"]["recuperado"]="Los datos introducidos no son válidos.";
-                $this->recuperarPassword();
+        } else {
+            $_SESSION["errores"]["recuperado"] = "Los datos introducidos no son válidos.";
+            $this->recuperarPassword();
         }
     }
     public function enviarIncidencia()
@@ -356,6 +365,7 @@ class controlador
         $idDepartamento = $_POST["departamento"];
         $urgente = $_POST["estado"];
         $mensaje = trim($mensaje);
+        $mensaje=str_replace("\r\n", "", $mensaje);
         if (isset($mensaje) && !empty($mensaje) && $mensaje != "") {
 
             $resultado = $this->modelo->enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $urgente);
@@ -384,15 +394,7 @@ class controlador
             $telefonoFijo = $_POST["telefonoFijo"];
 
             // Asignamos el valor del departamento
-            if ($_POST["departamento"] == 0) {
-                $departamento = "Informática";
-            } else {
-                if ($_POST["departamento"] == 1) {
-                    $departamento = "Administración";
-                } else {
-                    $departamento = "Comercio";
-                }
-            }
+            $departamento = $_POST["departamento"];
             // Aceptado
             if ($_POST["aceptado"] == 0) {
                 $aceptado = 0; // No aceptado
@@ -410,6 +412,7 @@ class controlador
             $resultado = $this->modelo->editar($id, $nif, $nombre, $apellido1, $apellido2, $email, $nombreUsuario, $password, $telefonoMovil, $telefonoFijo, $departamento, $aceptado, $rol);
 
             if ($resultado == true) {
+                $this->logEditar();
                 $this->listadoUsuarios();
             } else {
                 echo "Ha ocurrido un error editar :(";
@@ -422,11 +425,10 @@ class controlador
 
     public function borrarUsuario()
     {
-        if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_SESSION["logueado"]->Rol==$_GET["id"]) {
+        if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_SESSION["logueado"]->Rol == $_GET["id"]) {
             echo "<div class='alert alert-danger'>No puede borrar su usuario.</div>";
             $this->inicioLogueado();
-        }
-        elseif (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_SESSION["logueado"]->Rol==1) {
+        } elseif (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_SESSION["logueado"]->Rol == 1) {
             $id = $_GET["id"];
             $resultModelo = $this->modelo->borrarUsuario($id);
             if ($resultModelo["correcto"]) {
@@ -437,12 +439,27 @@ class controlador
                 echo "<div class='alert alert-danger'>Ha ocurrido un error.</div>";
                 $this->inicioLogueado();
             }
-        }else{
+        } else {
             echo "<div class='alert alert-danger'>Ha ocurrido un error.</div>";
             $this->inicioLogueado();
         }
     }
 
+    public function borrarIncidencia()
+    {
+        if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_SESSION["logueado"]->Rol == 1) {
+            $id = $_GET["id"];
+            $resultModelo = $this->modelo->borrarIncidencia($id);
+            if ($resultModelo["correcto"]) {
+                echo "<div class='alert alert-success'>Incidencia correctamente.</div>";
+                $this->inicioLogueado();
+                /* header("Location:index.php?accion=listado"); */
+            } else {
+                echo "<div class='alert alert-danger'>Ha ocurrido un error.</div>";
+                $this->inicioLogueado();
+            }
+        }
+    }
     public function listadoIncidencias()
     {
         $parametros = [
@@ -476,6 +493,75 @@ class controlador
         // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
         include_once 'vistas/vistaListadoIncidencias.php';
     }
+
+    public function listadoIncidenciasFecha()
+    {
+        $parametros = [
+            "tituloventana" => "Listado de usuarios",
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "mensajes" => []
+        ];
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 5;
+        $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
+        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+        $resultModelo = $this->modelo->listadoIncidenciasFecha($inicio, $regsxpag);
+
+        if ($resultModelo["correcto"]) :
+            $parametros["datos"] = $resultModelo["datos"];
+            $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
+            //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+            $this->mensajes[] = [
+                "tipo" => "success",
+                "mensaje" => "El listado se realizó correctamente"
+            ];
+        else :
+            //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+            $this->mensajes[] = [
+                "tipo" => "danger",
+                "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$parametros["error"]})"
+            ];
+        endif;
+        $parametros["mensajes"] = $this->mensajes;
+        // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
+        include_once 'vistas/vistaListadoIncidenciasFecha.php';
+    }
+
+    public function listadoIncidenciasDepartamento()
+    {
+        $parametros = [
+            "tituloventana" => "Listado de usuarios",
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "mensajes" => []
+        ];
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 5;
+        $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
+        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+        $resultModelo = $this->modelo->listadoIncidenciasDepartamento($inicio, $regsxpag);
+
+        if ($resultModelo["correcto"]) :
+            $parametros["datos"] = $resultModelo["datos"];
+            $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
+            //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+            $this->mensajes[] = [
+                "tipo" => "success",
+                "mensaje" => "El listado se realizó correctamente"
+            ];
+        else :
+            //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+            $this->mensajes[] = [
+                "tipo" => "danger",
+                "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$parametros["error"]})"
+            ];
+        endif;
+        $parametros["mensajes"] = $this->mensajes;
+        // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
+        include_once 'vistas/vistaListadoIncidenciasDepartamento.php';
+    }
+
     public function listadoUsuarios()
     {
         // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
@@ -908,13 +994,71 @@ class controlador
         return $guardarUser;
     }
 
+    public function listadoLogsFecha()
+    {
+        // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
+        $parametros = [
+            "tituloventana" => "Listado de logs",
+            "datos" => NULL,
+            "datosPaginacion" => Null,
+            "mensajes" => []
+        ];
+
+        //Establecemos el número de registros a mostrar por página,por defecto 5
+        $regsxpag = (isset($_GET['regsxpag'])) ? (int) $_GET['regsxpag'] : 5;
+        //Establecemos el la página que vamos a mostrar, por página,por defecto la 1
+        $pagina = (isset($_GET['pagina'])) ? (int) $_GET['pagina'] : 1;
+
+        //Definimos la variable $inicio que indique la posición del registro desde el que se
+        // mostrarán los registros de una página dentro de la paginación.
+        $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+
+        // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
+        $resultModelo = $this->modelo->listadoLogsFecha($inicio, $regsxpag);
+        // Si la consulta se realizó correctamente transferimos los datos obtenidos
+        // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
+        // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
+        if ($resultModelo["correcto"]) :
+            $parametros["datos"] = $resultModelo["datos"];
+            $parametros["datosPaginacion"] = $resultModelo["datosPaginacion"];
+            //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+            $this->mensajes[] = [
+                "tipo" => "success",
+                "mensaje" => "El listado se realizó correctamente"
+            ];
+        else :
+            //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+            $this->mensajes[] = [
+                "tipo" => "danger",
+                "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$parametros["error"]})"
+            ];
+        endif;
+        //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
+        //'mensaje', que recoge cómo finalizó la operación:
+        $parametros["mensajes"] = $this->mensajes;
+        // Incluimos la vista en la que visualizaremos los datos o un mensaje de error
+        include_once 'vistas/vistaLogsListadoFecha.php';
+    }
+    public function logEditar(){
+        $id=$_SESSION["logueado"]->id;
+        $result=$this->modelo->logEditar($id);
+    }
+    public function logLogin(){
+        $id=$_SESSION["logueado"]->id;
+        $result=$this->modelo->logLogin($id);
+    }
+    public function logEliminar(){
+        $id=$_SESSION["logueado"]->id;
+        $result=$this->modelo->logEliminarUsuario($id);
+    }
     public function listadoPdf()
     {
         require_once 'pdf/vendor/autoload.php';
         ob_start();
         $content = $this->modelo->listadoPdf($_GET['aceptado']);
 
-        
+
         $html2pdf = new Spipu\Html2Pdf\Html2Pdf('L', 'A4', 'es'); // L para que sea horizontal, P para que sea vertical
         $html2pdf->pdf->SetDisplayMode('fullpage');
         $html2pdf->writeHTML($content);

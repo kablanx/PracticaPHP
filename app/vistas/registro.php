@@ -47,7 +47,7 @@
                 <!-- Segundo appelido -->
                 <div class="form-group">
                     <label for="apellido2">Segundo apellido*:</label>
-                    <input name="apellido2" type="text" id="apellido2" class="apellido2" placeholder="Segundo apellido" autofocus="" required /></p>
+                    <input name="apellido2" type="text" id="apellido2" class="apellido2" placeholder="Segundo apellido" autofocus="" required/></p>
                     <span><?php echo isset($_SESSION["errores"]) ? mostrarError($_SESSION["errores"], "apellido1") : "" ?></span>
                 </div>
 

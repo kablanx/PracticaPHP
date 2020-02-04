@@ -20,6 +20,10 @@
     <div class="tabla">
       <table class="table table-striped">
         <tr>
+          <?php
+          if ($_SESSION["logueado"]->Rol == 1) : ?>
+            <th>Id</th>
+          <?php endif; ?>
           <th>Nif</th>
           <th>Nombre</th>
           <th>Apellido1</th>
@@ -41,6 +45,9 @@
         <?php foreach ((array) $parametros["datos"] as $d) : ?>
           <!--Mostramos cada registro en una fila de la tabla-->
           <tr>
+            <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
+              <td><?= $d["id"] ?></td>
+            <?php endif; ?>
             <td><?= $d["Nif"] ?></td>
             <td><?= $d["Nombre"] ?></td>
             <td><?= $d["Apellido1"] ?></td>
@@ -52,45 +59,45 @@
 
             <!-- Campo departamento -->
             <?php
-              if($d["Departamento"]==1):
+            if ($d["Departamento"] == 1) :
             ?>
-            <td>Informática</td>
+              <td>Informática</td>
             <?php
-              elseif($d["Departamento"]==2):
+            elseif ($d["Departamento"] == 2) :
             ?>
-            <td>Administración</td>
+              <td>Administración</td>
             <?php
-              else:
+            else :
             ?>
-            <td>Comercio</td>
+              <td>Comercio</td>
             <?php
-              endif;
+            endif;
             ?>
 
             <!-- Campo aceptado -->
             <?php
-              if($d["Aceptado"]==1):
+            if ($d["Aceptado"] == 1) :
             ?>
-            <td>Aceptado</td>
+              <td>Aceptado</td>
             <?php
-              else:
+            else :
             ?>
-            <td>No aceptado</td>
+              <td>No aceptado</td>
             <?php
-              endif;
+            endif;
             ?>
 
             <!-- Campo rol -->
             <?php
-              if($d["Rol"]==1):
+            if ($d["Rol"] == 1) :
             ?>
-            <td>Administrador</td>
+              <td>Administrador</td>
             <?php
-              else:
+            else :
             ?>
-            <td>Profesor</td>
+              <td>Profesor</td>
             <?php
-              endif;
+            endif;
             ?>
 
             <?php if ($_SESSION["logueado"]->Rol == 1) : ?>
@@ -106,16 +113,16 @@
         <?php if ($pagina == 1) : ?>
           <li class="page-item disabled paginacion"><a class="page-link">&laquo;</a></li>
         <?php else : ?>
-          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoUsuariosNombreUsuario&pagina=<?php echo $pagina - 1 ?>">&laquo;</a></li>
+          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoUsuariosNombre&pagina=<?php echo $pagina - 1 ?>">&laquo;</a></li>
         <?php endif; ?>
 
         <?php
         $numeroPaginas = $parametros["datosPaginacion"];
         for ($i = 1; $i <= $numeroPaginas; $i++) {
           if ($pagina == $i) {
-            echo "<li class='page-item paginacion'><a class='page-link' href='index.php?accion=listadoUsuariosNombreUsuario&pagina=$i'>$i</a></li>";
+            echo "<li class='page-item paginacion'><a class='page-link' href='index.php?accion=listadoUsuariosNombre&pagina=$i'>$i</a></li>";
           } else {
-            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listadoUsuariosNombreUsuario&pagina=$i'>$i</a></li>";
+            echo "<li class='active page-item paginacion'><a class='page-link' href='index.php?accion=listadoUsuariosNombre&pagina=$i'>$i</a></li>";
           }
         }
         ?>
@@ -123,7 +130,7 @@
         <?php if ($pagina == $numeroPaginas) : ?>
           <li class="page-item disabled paginacion"><a class="page-link">&raquo;</a></li>
         <?php else : ?>
-          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoUsuariosNombreUsuario&pagina=<?php echo $pagina + 1 ?>">&raquo;</a></li>
+          <li class="page-item active paginacion"><a class="page-link" href="index.php?accion=listadoUsuariosNombre&pagina=<?php echo $pagina + 1 ?>">&raquo;</a></li>
         <?php endif; ?>
 
       </ul>
