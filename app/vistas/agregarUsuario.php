@@ -106,7 +106,8 @@
                 
             </form>
             <?php
-            borrarErrores() ?>
+            borrarErrores() ;
+            ?>
         </div>
 
     </div>

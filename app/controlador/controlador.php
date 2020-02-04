@@ -242,6 +242,7 @@ class controlador
     public function logueado()
     {
         $this->includes();
+
         $usuarioValido = $this->validarLogin();
 
 
@@ -345,11 +346,11 @@ class controlador
             $password = sha1($_POST["password"]);
 
             $resultado = $this->modelo->recuperarPassword($nif, $usuario, $email, $password);
-            if ($resultado) {
+            if ($resultado["correcto"]) {
                 echo "<div class='alert alert-success'>Se ha modificado la contraseña.</div>";
                 $this->recuperarPassword();
             } else {
-                $_SESSION["errores"]["recuperado"] = "Ha ocurrido un problema al recuperar la contraseña.";
+                $_SESSION["errores"]["recuperado"] = "Compruebe que los datos son correctos.";
                 $this->recuperarPassword();
             }
         } else {
