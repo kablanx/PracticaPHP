@@ -256,6 +256,7 @@ class controlador
     public function logueado()
     {
         $this->includes();
+
         $usuarioValido = $this->validarLogin();
 
 
