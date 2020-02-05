@@ -14,9 +14,11 @@ textarea#mensaje {
 .colorcito {
     background-color: blueviolet;
 }
-.pagination{
+
+.pagination {
     width: 95%;
 }
+
 .cuerpo {
     font-family: 'Lato', sans-serif;
     font-size: 16px;
@@ -125,4 +127,11 @@ a.page-link {
 
 input#email {
     width: 40ch;
+}
+
+
+/* Centrar CKEditor */
+
+div#editor {
+    text-align: -webkit-center;
 }

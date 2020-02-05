@@ -25,7 +25,7 @@
                 Incidencias
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="index.php?accion=vistaEnviarIncidencias">Enviar incidencia</a>
+            <a class="dropdown-item" href="index.php?accion=vistaEnviarIncidencias">Enviar incidencia</a>
                 <a class="dropdown-item" href="index.php?accion=listadoIncidencias">Listado</a>
                 <a class="dropdown-item" href="index.php?accion=listadoIncidenciasFecha">Listado ordenado por "Fecha"</a>
                 <a class="dropdown-item" href="index.php?accion=listadoIncidenciasDepartamento">Listado ordenado por "Departamento"</a>

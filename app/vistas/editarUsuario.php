@@ -140,15 +140,12 @@
         </div>
 
     </div>
-    <!-- <textarea name="nifa" id="nifa"></textarea>
-    <script>
-      CKEDITOR.replace('nifa');
-    </script> -->
-    <div id="editor">This is some sample content.</div>
+    
+    <!-- <div id="editor">This is some sample content.</div>
     <script>
         InlineEditor
             .create(document.querySelector('#editor'));
-    </script>
+    </script> -->
 </body>
 
 </html>

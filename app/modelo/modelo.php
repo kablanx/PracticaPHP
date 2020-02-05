@@ -20,8 +20,8 @@ class modelo
             $this->conexion = new PDO("mysql:host=$this->host;dbname=$this->db", $this->user, $this->pass);
             $this->conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             // Para saber si nos hemos conectado a la db
-            echo '<div class="alert alert-success">' .
-                "Conectado a la Base de Datos de usuarios!! :)" . '</div>';
+           /*  echo '<div class="alert alert-success">' .
+                "Conectado a la Base de Datos de usuarios!! :)" . '</div>'; */
             $return = TRUE;
         } catch (PDOException $ex) {
             echo '<div class="alert alert-danger">' .
@@ -387,6 +387,20 @@ class modelo
         $datos = $query->fetch(PDO::FETCH_OBJ);
         return $datos;
     }
+    public function seleccionarIncidencia($id){
+        $return = [
+            "correcto" => FALSE,
+            "datos" => NULL,
+            "error" => NULL
+        ];
+        $sql = "SELECT * FROM incidencias WHERE `id`=:id;";
+        $query = $this->conexion->prepare($sql);
+        // Ejecutamos y le pasamos los valores 
+        $query->bindParam(':id', $id);
+        $query->execute();
+        $datos = $query->fetch(PDO::FETCH_OBJ);
+        return $datos;
+    }
     
     public function validarLogin($usuario, $passwordlogin)
     {
@@ -412,7 +426,6 @@ class modelo
         $query->bindParam(':passwordlogin', $passwordlogin);
         $query->execute();
         $datos = $query->fetch(PDO::FETCH_OBJ);
-        var_dump($datos);
         //var_dump();
         //die();
         //var_dump($datos);
@@ -435,6 +448,19 @@ class modelo
         }
         return $resultado;
     }
+    public function editarIncidencia($id, $mensaje, $estado){
+        $sql="UPDATE incidencias SET mensaje=:mensaje, estado=:estado WHERE id=:id";
+        $query = $this->conexion->prepare($sql);
+        /* var_dump($query); */
+        $query->execute(['id'=>$id, 'mensaje'=>$mensaje, 'estado'=>$estado]);
+        
+        if ($query) {
+            $resultado = true;
+        } else {
+            $resultado = false;
+        }
+        return $resultado;
+    }
     public function recuperarPassword($nif, $nombreUsuario, $email, $passwordSegura)
     {
         $return = [
@@ -442,12 +468,21 @@ class modelo
             "datos" => NULL,
             "error" => NULL
         ];
-        try {  //Definimos la instrucción SQL  
-            $sql = "UPDATE usuarios SET PasswordSegura=:passwordSegura WHERE Nif=:nif AND NombreUsuario=:nombreUsuario AND Email=:email";
+        try {  
+            // Cambio de contraseña
+            $sql = "UPDATE usuarios SET PasswordSegura=:passwordSegura WHERE (Nif=:nif AND NombreUsuario=:nombreUsuario AND Email=:email)";
             $resultsquery = $this->conexion->prepare($sql);
             $resultsquery->execute(['nif' => $nif, 'email' => $email, 'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura]);
-            //Supervisamos si la inserción se realizó correctamente... 
-            if ($resultsquery) :
+
+            // Seleccionamos el registro
+            $sql="SELECT * FROM usuarios WHERE Nif=:nif AND NombreUsuario=:nombreUsuario AND Email=:email AND PasswordSegura=:passwordSegura";
+            $resultado=$this->conexion->prepare($sql);
+            $resultado->execute(['nif' => $nif, 'email' => $email, 'nombreUsuario' => $nombreUsuario, 'passwordSegura' => $passwordSegura]);
+
+            // Comprobamos que existe el registro
+            $resultado = $resultado->fetch(PDO::FETCH_OBJ);
+            //Si existe el registro
+            if ($resultado) :
                 $return["correcto"] = TRUE;
             endif; // o no :(
         } catch (PDOException $ex) {
@@ -457,7 +492,7 @@ class modelo
     }
     public function enviarIncidencia($idProfesor, $idDepartamento, $mensaje, $estado)
     {
-        $sql = "INSERT INTO incidencias (`id`, `id_profesor`, `id_departamento`, `mensaje`, `estado`, `fecha`) VALUES (null,:idProfesor,:idDepartamento,:mensaje,:estado, CURRENT_TIME);";
+        $sql = "INSERT INTO incidencias (`id`, `id_profesor`, `id_departamento`, `mensaje`, `estado`, `fecha`) VALUES (null,:idProfesor,:idDepartamento,:mensaje,:estado, CURRENT_TIMESTAMP);";
         $query = $this->conexion->prepare($sql);
         $query->execute(['idProfesor' => $idProfesor, 'idDepartamento' => $idDepartamento, 'mensaje' => $mensaje, 'estado' => $estado]);
         if ($query) {

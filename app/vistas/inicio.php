@@ -16,7 +16,7 @@
                         <img class="alineadoTextoImagen" src="../Assets/img/user.png" width="50px" />Panel de control</h2>
                 </p>
                 <div>
-                    <a class="imgL" href="index.php?accion=agregarUsuario"><img class="imgP" src="../Assets/img/usuarios.png" /></a>
+                    <a class="imgL" href="index.php?accion=listadoUsuarios"><img class="imgP" src="../Assets/img/usuarios.png" /></a>
                     <a class="imgR" href="index.php?accion=vistaEnviarIncidencias"><img class="imgP" src="../Assets/img/incidencia.png" /></a>
                 </div>
                 

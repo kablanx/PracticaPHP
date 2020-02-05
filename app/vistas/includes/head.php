@@ -21,4 +21,4 @@
 <!-- CKEditor -->
 
 <!-- <script src="https://cdn.ckeditor.com/4.13.1/inline/ckeditor.js"></script> -->
-<script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/inline/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/16.0.0/classic/ckeditor.js"></script>

@@ -85,6 +85,20 @@ class controlador
         $_SESSION["editar"] = $resultado;
         include_once 'vistas/editarUsuario.php';
     }
+
+    public function editarIncidencia(){
+        $parametros = ["tituloventana" => "Editar"];
+        $this->includes();
+
+        // Guardamos el id que queremos editar para poder usarlo más adelante.
+        /* $_SESSION["idEditar"] = $_GET["id"]; */
+
+        // Intento de otra forma, para que salgan los campos del registro a editar
+        $id = $_GET["id"];
+        $resultado = $this->modelo->seleccionarIncidencia($id);
+        $_SESSION["editar"] = $resultado;
+        include_once 'vistas/editarIncidencia.php';
+    }
     public function agregarUsuario()
     {
         $parametros = ["tituloventana" => "Agregar usuario"];
@@ -345,11 +359,11 @@ class controlador
             $password = sha1($_POST["password"]);
 
             $resultado = $this->modelo->recuperarPassword($nif, $usuario, $email, $password);
-            if ($resultado) {
+            if ($resultado["correcto"]) {
                 echo "<div class='alert alert-success'>Se ha modificado la contraseña.</div>";
                 $this->recuperarPassword();
             } else {
-                $_SESSION["errores"]["recuperado"] = "Ha ocurrido un problema al recuperar la contraseña.";
+                $_SESSION["errores"]["recuperado"] = "Compruebe que los datos son correctos.";
                 $this->recuperarPassword();
             }
         } else {
@@ -423,6 +437,21 @@ class controlador
         }
     }
 
+    public function enviarEditarIncidencia(){
+        $id=$_SESSION["editar"]->id;
+        $mensaje=strip_tags($_POST["mensaje"]);
+        var_dump($mensaje);
+        /* $mensaje= "<script> $('#mensaje').ckeditor(); </script>"; */
+        $estado=$_POST["estado"];
+        $resultado=$this->modelo->editarIncidencia($id, $mensaje, $estado);
+        if ($resultado == true) {
+            // $this->logEditar();
+            $this->listadoIncidencias();
+        } else {
+            echo "Ha ocurrido un error editar :(";
+            $this->listadoIncidencias();
+        }
+    }
     public function borrarUsuario()
     {
         if (isset($_GET["id"]) && is_numeric($_GET["id"]) && $_SESSION["logueado"]->Rol == $_GET["id"]) {
@@ -1059,9 +1088,11 @@ class controlador
         $content = $this->modelo->listadoPdf($_GET['aceptado']);
 
 
-        $html2pdf = new Spipu\Html2Pdf\Html2Pdf('L', 'A4', 'es'); // L para que sea horizontal, P para que sea vertical
+        $html2pdf = new Spipu\Html2Pdf\Html2Pdf('L', 'A4', 'es', true, 'UTF-8'); // L para que sea horizontal, P para que sea vertical
         $html2pdf->pdf->SetDisplayMode('fullpage');
         $html2pdf->writeHTML($content);
-        $html2pdf->output('listado.pdf');
+        $path='PracticaPHP/';
+        $html2pdf->output($_SERVER['DOCUMENT_ROOT'].'/'. $path .'listado.pdf', 'F');
+        header("Location: ../listado.pdf");
     }
 }

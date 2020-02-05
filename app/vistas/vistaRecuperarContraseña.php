@@ -15,7 +15,7 @@
     <span><?php echo isset($_SESSION["errores"]) ? mostrarError($_SESSION["errores"], "recuperado") : "" ?></span>
     <div class="centrar container">
         <form class="form" action="index.php?accion=enviarRecuperarPassword" method="POST">
-            
+
             <div class="form-group">
                 <label for="usuario">Usuario:</label>
                 <input name="usuario" type="text" id="usuario" class="usuario" placeholder="Usuario" autofocus="" required /></p>
@@ -41,9 +41,10 @@
                 <input name="submit" type="submit" id="boton" value="Recuperar contraseña" class="boton" />
             </div>
         </form>
-
-
     </div>
+    <?php
+    borrarErrores(); 
+    ?>
 </body>
 
 </html>

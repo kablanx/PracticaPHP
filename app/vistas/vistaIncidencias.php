@@ -25,7 +25,7 @@
                             });
                         });
                     </script>
-                    <textarea cols="59" rows="6" id="mensaje" name="mensaje" maxlength="245"></textarea>
+                    <textarea cols="59" rows="6" id="mensaje" name="mensaje" maxlength="245" required ></textarea>
                 </div>
                 <div class="form-group">
                     <label for="departamento">Departamento:</label><br />
